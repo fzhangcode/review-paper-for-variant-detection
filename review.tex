@@ -44,9 +44,10 @@ $^{2}$Department of Mathematics and Statistics, University of Massachusetts, Amh
 
 %Scope the article to nucleotides and variant calling in the context of larger pipeline.
 Next-generation sequencing (NGS) technology has revealed the presence of extensive genomic variants in clinical samples.
-The general pipeline to analyze single nucleotide variants (SNVs) in the large-scale NGS data basically consists five main steps: quality control, preprocessing, alignment, post-alignment processing, and variant detection \citep{Bao2014}.
-In this sequence analysis pipeline, variant detection is the last and the most important step for discovering disease-causing variants.
-In this review, we focus on rare variant detection in the DNA sequencing data and classification of current computational and statistical variant detection methods.
+In general, genomic variants can include single nucleotide variants (SNVs), insertions and deletions (indels), structural variants, and copy number variations (CNVs).
+The general pipeline to analyze single nucleotide variants (SNVs) in the large-scale NGS data basically consists five main steps: quality control, preprocessing, alignment, post-alignment processing, and variant analysis \citep{Bao2014}.
+Variant analysis basically contains three main parts, variant detection, annotation, and visualization, among which variant detection is crucial for NGS data analysis with an objective of discovering disease-causing variants.
+In this review, we focus on rare single nucleotide variant detection in DNA next-generation sequencing data and classification of current computational and statistical variant detection methods.
 
 %Outline the paper here with one paragraph overview per section.
 We first highlight the necessity of a sensitive variant detection method from the perspective of biological impacts and statistical accuracy,
@@ -73,15 +74,45 @@ What is the payoff for spending time and energy on this problem.
 
 \section{Hallmarks of a good variant detection method}
 \subsection{Accuracy}
+
 \subsection{Scalability}
+
 \subsection{Robustness}
+
+Tradeoff between accuracy and scalability.
 
 It depends on specific purposes.
 
-\section{Factors that effect the ability of variant detection methods}
-coverage of NGS data, allele fraction...
+\section{Factors that affect the ability of variant detection methods}
+The next-generation sequencing data is massive and heterogeneous and many factors could influence the performance of a variant detection method.
+%\subsection{Quality control}
+The quality of the data can affect the variant detection, so checking the quality of the raw data and filtering the low-confidence alleles before analyzing it will improve the accuracy of variant detection.
+A standard tool, FastQC, is implemented for assessing the quality by generating analytical graphs.
+Low-confidence alleles that the Phred score is less than 20 can be removed to prevent from making a wrong variant call \citep{}.
+
+%\subsection{Depth of coverage}
+Sequencing depth of coverage, number of times that each base has been sequenced, contributes to the results of variant detection because sufficient depth of coverage is necessary to support an accurate variant call.
+Due to the high cost of sequencing, the depth of coverage of the sequencing data can be low (10x or 20x) and the distribution of the read depth over each site is could be not uniform.
+Previous researchers have studied the effect of coverage and revealed that high coverage data leads to high sensitivity of variant detection \citep{neuman2013analysis, krawitz2010microindel}.
+The minimum coverage for a single nucleotide polymorphism is 50x and some applications may need higher coverage \citep{Schlotterer2014}.
+It is reasonable that if you desire to detect a rare variant of $1 \%$ allele frequency, the required depth of coverage is 1000x.
+%Develop probabilistic methods to estimate the posterior probability of each site to be a variant in the low read depth data.
 
 
+%\subsection{Errors}
+Intrinsic errors from next-generation sequencing platform exist in sample processing and sequencing \citep{Olson2015}.
+These errors may cause false positive variant calls in the variant detection step.
+Especially, identification of variants of minor allele frequencies is challenging because it is difficult to differentiate a true rare variant ($<$1 \%) from a sequencing error (1\% - 3\%).
+% give an example error from sample processing
+% give an example error from sequencing
+% give an example error from variant detection
+In the variant detection step, errors may also exist due to the limitation of the variant detection methods.
+For example, a prior assignment in a probabilistic method can be subjective that causes bias to predict the probabilistic distribution of the allele frequency of a site in the sequence.
+This will lead a miscalling of a false positive when comparing the allele frequencies of one site in a control/case pair.
+
+%Sample size
+%"the expected false positive rate will increase linearly with the sample size (Nielsen)"
+%individual sample or multiple individuals sample (pooled).
 
 \section{Classification for variant detection methods}
 We classify the state-of-the-art variant detection methods into two categories - probabilistic methods and non-probabilistic methods (Table~\ref{tbl:methods}).
@@ -111,7 +142,6 @@ SAMTools \citep{Li2009a},
 Mutect \citep{Cibulskis2013},
 
 FamSeq \citep{Peng2013},
-
 Virmid \citep{Kim2013},
 
 EM-SNP \citep{Chen2013},
