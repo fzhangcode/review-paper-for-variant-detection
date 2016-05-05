@@ -88,31 +88,36 @@ The next-generation sequencing data is massive and heterogeneous and many factor
 %\subsection{Quality control}
 The quality of the data can affect the variant detection, so checking the quality of the raw data and filtering the low-confidence alleles before analyzing it will improve the accuracy of variant detection.
 A standard tool, FastQC, is implemented for assessing the quality by generating analytical graphs.
-Low-confidence alleles that the Phred score is less than 20 can be removed to prevent from making a wrong variant call \citep{}.
+Low-confidence alleles can be trimmed using a standalone tool, NGS QC Toolkit \citep{patel2012ngs}, to prevent from making a wrong variant call.
+Although, filtering low-confidence alleles helps in read alignment, it is noticeable that false positives could be introduced for high-coverage data set \citep{liu2012steps}.
+Thus, we should consider not only quality control in read mapping but also the read depth of coverage in order to ensure the accuracy of variant detection.
 
 %\subsection{Depth of coverage}
 Sequencing depth of coverage, number of times that each base has been sequenced, contributes to the results of variant detection because sufficient depth of coverage is necessary to support an accurate variant call.
-Due to the high cost of sequencing, the depth of coverage of the sequencing data can be low (10x or 20x) and the distribution of the read depth over each site is could be not uniform.
+Due to the high cost of sequencing, the depth of coverage of the sequencing data can be low (less than 10x) and the distribution of the read depth over each site could be not uniform.
 Previous researchers have studied the effect of coverage and revealed that high coverage data leads to high sensitivity of variant detection \citep{neuman2013analysis, krawitz2010microindel}.
-The minimum coverage for a single nucleotide polymorphism is 50x and some applications may need higher coverage \citep{Schlotterer2014}.
-It is reasonable that if you desire to detect a rare variant of $1 \%$ allele frequency, the required depth of coverage is 1000x.
+~\citet{liu2013variant} indicates that the false discovery rate of variant detection using GATK decreased as the depth of coverage increased. 
+Generally, the minimum coverage for a single nucleotide polymorphism is 50x and some applications may need higher coverage \citep{Schlotterer2014}.
+It is reasonable that if you desire to detect a rare variant of $0.1 \%$ allele frequency, the required depth of coverage is 1000x.
 %Develop probabilistic methods to estimate the posterior probability of each site to be a variant in the low read depth data.
-
 
 %\subsection{Errors}
 Intrinsic errors from next-generation sequencing platform exist in sample processing and sequencing \citep{Olson2015}.
-These errors may cause false positive variant calls in the variant detection step.
-Especially, identification of variants of minor allele frequencies is challenging because it is difficult to differentiate a true rare variant ($<$1 \%) from a sequencing error (1\% - 3\%).
+These errors may cause false positives and false negatives in the variant detection step.
+Especially, identification of variants of minor variant allele frequency (VAF) is challenging because it is difficult to differentiate a true rare variant (VAF $<$1 \%) from a common sequencing error rate (1\% $<$ VAF $<$ 3\%).
 % give an example error from sample processing
 % give an example error from sequencing
 % give an example error from variant detection
-In the variant detection step, errors may also exist due to the limitation of the variant detection methods.
-For example, a prior assignment in a probabilistic method can be subjective that causes bias to predict the probabilistic distribution of the allele frequency of a site in the sequence.
-This will lead a miscalling of a false positive when comparing the allele frequencies of one site in a control/case pair.
+In variant detection step, errors may also exist due to the limitation of the design of the variant detection methods.
+For example, a prior assignment in a probabilistic method can be subjective, which may cause bias to predict the probabilistic distribution of the allele frequency of a site in the sequence.
+This will lead a miscalling of a rare variant when comparing the allele frequencies of one site in a control/case pair.
 
 %Sample size
-%"the expected false positive rate will increase linearly with the sample size (Nielsen)"
-%individual sample or multiple individuals sample (pooled).
+Multiple samples (pooled) enabled us to identify more rare variants than individual sample \citep{Bao2014, liu2012steps}.
+~\citet{liu2013variant} demonstrated that GATK gives higher sensitivity for variant detection in a multiple-sample strategy than a single-sample strategy, but the specificity turned out to be decreased.
+The reason is that more false positives could be called in larger data sets with multiple samples \citep{Nielsen2011}. 
+However, if the coverage of the multiple samples is low, the false discovery rate for variant detection could be increased compared with the case of high coverage \citep{Cheng2014}.
+~\citet{le2011snp} observed that large data set of multiple sequencing samples at low coverage (4-6x) yields higher capability in rare variant detection compared to small data set of less sequencing samples at high coverage.
 
 \section{Classification for variant detection methods}
 We classify the state-of-the-art variant detection methods into two categories - probabilistic methods and non-probabilistic methods (Table~\ref{tbl:methods}).
