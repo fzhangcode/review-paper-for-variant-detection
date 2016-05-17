@@ -40,20 +40,19 @@ $^{2}$Department of Mathematics and Statistics, University of Massachusetts, Amh
 
 \section{Introduction}
 %\subsection{Sequence Analysis Pipeline}
-%Review http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4179624/
-
-%Scope the article to nucleotides and variant calling in the context of larger pipeline.
+%Scope of the article: nucleotides and variant calling in the context of larger pipeline.
 Next-generation sequencing (NGS) technology has revealed the presence of extensive genomic variants in clinical samples.
-In general, genomic variants can include single nucleotide variants (SNVs), insertions and deletions (indels), structural variants, and copy number variations (CNVs).
-The general pipeline to analyze single nucleotide variants (SNVs) in the large-scale NGS data basically consists five main steps: quality control, preprocessing, alignment, post-alignment processing, and variant analysis \citep{Bao2014}.
-Variant analysis basically contains three main parts, variant detection, annotation, and visualization, among which variant detection is crucial for NGS data analysis with an objective of discovering disease-causing variants.
-In this review, we focus on rare single nucleotide variant detection in DNA next-generation sequencing data and classification of current computational and statistical variant detection methods.
+In general, genomic variants can be present in the form of single nucleotide variants (SNVs), insertions and deletions, structural variants, and copy number variations.
+Single nucleotide variant is a primary source of genetic variation that can cause susceptibility to disease or drug resistance to  anti-tumour therapeutics.
+The general pipeline to analyze single nucleotide variants in the large-scale NGS data basically consists five main steps: quality control, preprocessing, alignment, post-alignment processing, and variant analysis \citep{Bao2014}.
+Variant analysis basically contains three main parts: variant detection, annotation, and visualization, among which variant detection is crucial for NGS data analysis with an objective of discovering disease-causing variants.
+In this review, we focus on single nucleotide variant detection in DNA next-generation sequencing data and classification of current computational and statistical variant detection methods.
 
 %Outline the paper here with one paragraph overview per section.
 We first highlight the necessity of a sensitive variant detection method from the perspective of biological impacts and statistical accuracy,
 and then present the hallmarks of a good variant detection method based on the evaluation of accuracy, scalability, and robustness.
 We also discuss the issues that will effect the ability of variant detection methods.
-Finally, we classify the state-of-the-art variant detection methods into the categories of probabilistic or non-probabilistic methods and survey each method in detail.
+Finally, we classify the state-of-the-art variant detection methods into the categories of probabilistic and non-probabilistic methods and survey each method in detail.
 
 
 \section{Why do we need a sensitive variant detection method?}
@@ -86,19 +85,19 @@ It depends on specific purposes.
 \section{Factors that affect the ability of variant detection methods}
 The next-generation sequencing data is massive and heterogeneous and many factors could influence the performance of a variant detection method.
 %\subsection{Quality control}
-The quality of the data can affect the variant detection, so checking the quality of the raw data and filtering the low-confidence alleles before analyzing it will improve the accuracy of variant detection.
+The quality of the data can affect variant detection, so checking the quality of the raw data and filtering the low-confidence alleles in advance will improve the accuracy of variant detection.
 A standard tool, FastQC, is implemented for assessing the quality by generating analytical graphs.
 Low-confidence alleles can be trimmed using a standalone tool, NGS QC Toolkit \citep{patel2012ngs}, to prevent from making a wrong variant call.
-Although, filtering low-confidence alleles helps in read alignment, it is noticeable that false positives could be introduced for high-coverage data set \citep{liu2012steps}.
+Although filtering low-confidence alleles helps with read alignment, it is noticeable that false positives could be introduced for high-coverage data set \citep{liu2012steps}.
 Thus, we should consider not only quality control in read mapping but also the read depth of coverage in order to ensure the accuracy of variant detection.
 
 %\subsection{Depth of coverage}
 Sequencing depth of coverage, number of times that each base has been sequenced, contributes to the results of variant detection because sufficient depth of coverage is necessary to support an accurate variant call.
-Due to the high cost of sequencing, the depth of coverage of the sequencing data can be low (less than 10x) and the distribution of the read depth over each site could be not uniform.
+Due to the high cost of sequencing, the depth of coverage of the sequencing data can be low (less than $10\times$) and the distribution of the read depth over each site could be not uniform.
 Previous researchers have studied the effect of coverage and revealed that high coverage data leads to high sensitivity of variant detection \citep{neuman2013analysis, krawitz2010microindel}.
 \citep{liu2013variant} indicates that the false discovery rate of variant detection using GATK decreased as the depth of coverage increased.
 Generally, the minimum coverage for a single nucleotide polymorphism is 50x and some applications may need higher coverage \citep{Schlotterer2014}.
-It is reasonable that if you desire to detect a rare variant of $0.1 \%$ allele frequency, the required depth of coverage is 1000x.
+It is reasonable that if you desire to detect a rare variant of $0.1 \%$ allele frequency, the required depth of coverage i $1000\times$.
 %Develop probabilistic methods to estimate the posterior probability of each site to be a variant in the low read depth data.
 
 %\subsection{Errors}
@@ -113,14 +112,14 @@ For example, a prior assignment in a probabilistic method can be subjective, whi
 This will lead a miscalling of a rare variant when comparing the allele frequencies of one site in a control/case pair.
 
 %Sample size
-Multiple samples (pooled) enabled us to identify more rare variants than individual sample \citep{Bao2014, liu2012steps}.
-\citep{liu2013variant} demonstrated that GATK gives higher sensitivity for variant detection in a multiple-sample strategy than a single-sample strategy, but the specificity turned out to be decreased.
-The reason is that more false positives could be called in larger data sets with multiple samples \citep{Nielsen2011}.
+Multiple samples (pooled sequencing) enabled us to identify more rare variants than individual sample \citep{Bao2014, liu2012steps}.
+\citep{liu2013variant} demonstrated that GATK gives higher sensitivity for variant detection in a multiple-sample strategy than a single-sample strategy, but the specificity turned out to be decreased in multiple-sample strategy.
+The reason is that more false positives are called in larger data sets with multiple samples \citep{Nielsen2011}.
 However, if the coverage of the multiple samples is low, the false discovery rate for variant detection could be increased compared with the case of high coverage \citep{Cheng2014}.
-\citep{le2011snp} observed that large data set of multiple sequencing samples at low coverage (4-6x) yields higher capability in rare variant detection compared to small data set of less sequencing samples at high coverage.
+\citep{le2011snp} observed that large data set of multiple sequencing samples at low coverage (4-6$\times$) yields higher capability in rare variant detection compared to small data set of less sequencing samples at high coverage.
 
 \section{Classification for variant detection methods}
-We classify the state-of-the-art variant detection methods into two categories - probabilistic methods and non-probabilistic methods (Table \ref{tbl:methods}).
+We classify the state-of-the-art variant detection methods into two categories - probabilistic methods, and non-probabilistic or other combination methods (Table \ref{tbl:methods}).
 We discuss every method from three aspects: specific purpose of the method, category that this method falls into, and metrics or its applications.
 
 %\begin{table}[htbp]
@@ -132,7 +131,7 @@ We discuss every method from three aspects: specific purpose of the method, cate
 
 \begin{table}[htbp]
   \centering
-  \caption{Classification of variant detection methods in next-generation sequencing data.}
+  \caption{Classification of variant detection methods in next-generation sequencing data.}\label{tbl:methods}
   \footnotesize
     \begin{tabular}{rr}
     \toprule
@@ -143,7 +142,7 @@ We discuss every method from three aspects: specific purpose of the method, cate
           & \multicolumn{1}{l}{SAMTools} \\
           & \multicolumn{1}{l}{Mutect} \\
           & \multicolumn{1}{l}{FamSeq} \\
-          & \multicolumn{1}{l}{\textbf{Bayesian Estimation (MLE)}} \\
+          & \multicolumn{1}{l}{\textbf{Bayesian Estimation}} \\
           & \multicolumn{1}{l}{ Virmid} \\
           & \multicolumn{1}{l}{ EM-SNP} \\
           & \multicolumn{1}{l}{\textbf{Hierarchical/Empirical Bayesian Model}} \\
@@ -183,7 +182,6 @@ We discuss every method from three aspects: specific purpose of the method, cate
          & \multicolumn{1}{l}{Logistic Regression} \\
     \bottomrule
     \end{tabular}
-  \label{tab:addlabel}
 \end{table}
 
 
@@ -191,28 +189,28 @@ We discuss every method from three aspects: specific purpose of the method, cate
 We summary 21 variant detection methods that are developed based on probabilistic strategy in detail.
 
 GATK \citep{McKenna2010} is designed for detecting germline variants in homogeneous samples.
-It uses a simple Bayesian genotyper to calculate the posterior distribution of each genotype given the mapped reads over each site \citep{depristo2011framework}.
+It uses a simple Bayesian genotyper to calculate the posterior distribution of each genotype given mapped reads over each site \citep{depristo2011framework}.
 It adopted a MapReduce system to facilitate processing large-scale sequencing data in parallel and has been involved in 1000 Genomes Project and The Cancer Genome Atlas.
 
 SAMtools \citep{Li2009a} is implemented to manipulate the genomic sequences in the SAM and BAM format.
-Similar to GATK, SAMtools computes the likelihood of each possible genotype using a naive Bayesian model and then identify germline variants using BCFtools \citep{li2011statistical}.
+Similar to GATK, SAMtools computes the likelihood of each possible genotype using a naive Bayesian model and then identifies germline variants using BCFtools \citep{li2011statistical}.
 It has been demonstrated for comparable accuracy in real data for allele count estimation, allele frequency estimation, and association mapping.
 
 MuTect \citep{Cibulskis2013} is a method to detect germline and somatic variants with low allele frequencies at various sequencing read depths in mixed tumour samples.
 It is built on a Bayesian classifier to calculate a log-likelihood ratio that can be used as a threshold for variant detection in matched tumour and normal samples.
-It is shown that MuTect is more sensitive than other competing methods in detecting somatic mutations with low fraction of tumour cells, which enables us to discover subclonal drivers for tumour progression.
+It has been shown that MuTect is more sensitive than other competing methods in detecting somatic variants within low fraction of tumour cells, which enables us to discover subclonal drivers for tumour progression.
 
-SomaticSniper \citep{Larson2012} detects somatic variants by directly comparing the joint diploid genotype likelihoods for tumour and normal pairs.
-The genotype likelihood is calculated using the MAQ method \citep{Li2008} by  incorparating the dependency of the genotypes between tumour and normal samples.
-Sensitivity and precision are used to evaluate the performance of variant detection on a simulated data set.
+SomaticSniper \citep{Larson2012} detects somatic variants by directly comparing the joint diploid genotype likelihoods for a tumour-normal pair.
+The genotype likelihood is calculated using MAQ method \citep{Li2008} by  incorparating the dependency of the genotypes between tumour and normal samples.
+Sensitivity and precision are employed to evaluate the performance of variant detection on a simulated data set.
 
 Strelka \citep{Saunders2012} is an algorithm for somatic variant detection in a joint analysis of matched tumour and normal samples.
 It is a Bayesian method that models the joint probabilistic distribution of continuous allele frequencies.
 Strelka is capable to maintain high sensitivity in low purity tumour samples.
 
-JointSNVMix \citep{Roth2012} is introduced to discover somatic point variants and distinguish germline from somatic variants.
+JointSNVMix \citep{Roth2012} is introduced to discover somatic point variants and distinguish germline from somatic events.
 It applies two novel Bayesian probabilistic models to jointly analyze the allelic count of tumour and normal samples.
-Concordance is used as a probabilistic threshold to measure the performance of variants detection.
+Concordance is used as a probabilistic threshold to measure the performance of variant detection.
 Is has been demonstrated that the joint modelling, JointSNVMix, has higher specificity than its independent analogue with guaranteed sensitivity.
 
 Virmid \citep{Kim2013} is implemented for somatic variant detection using the idea of estimating the level of sample contamination.
@@ -248,18 +246,18 @@ CRISP \citep{Bansal2010}.
 Seurat \citep{Christoforides2013}
 
 We previously developed a Beta-Binomial model, RVD \citep{Flaherty2012}, to characterize error rate distribution of each site of the next-generation sequencing data.
-RVD is able to detect a 0.1\% variant allele frequency event on a synthetic DNA data set.
+RVD is able to detect a 0.1\% variant allele frequency event in a synthetic DNA data set.
 Then, we developed RVD2 \citep{He2015} that improved RVD by adding priors to tie parameters across sites and derived a Markov Chain Monte Carlo (MCMC) sampling algorithm for posterior inference.
-Based on this improvement, RVD2 can handle low read depths sequencing data and multiple replicates.
-Furthermore, we proposed a variational expectation maximization (EM) algorithm \citep{zhang2016variational} for our Bayesian statistical model to detect single nucleotide variants in heterogeneous samples.
-Variational RVD is demonstrated with comparable sensitivity and specificity compared with other state-of-the-art algorithms and can track the non-reference allele frequency in a real time-series sequencing data set.
+Based on this improvement, RVD2 can handle low read depth sequencing data and manipulate multiple replicates.
+Furthermore, we proposed a variational expectation maximization (EM) algorithm \citep{zhang2016variational} for the Bayesian statistical model to detect single nucleotide variants in heterogeneous samples.
+Variational EM algorithm is demonstrated with comparable sensitivity and specificity compared with other state-of-the-art algorithms and can track non-reference allele frequency in a real time-series sequencing data set
 
 
 \subsection{Non-probabilistic Methods}
 We summary 6 variant detection methods that are developed based on non-probabilistic or other combination methods.
 
 SNVer \citep{Wei2011} is a common and rare variant detection method for both individual and pooled sequencing data and it is scalable for whole genome sequencing data.
-This is a frequentist method that reports overall P-values for every cite without discarding sites with low read depth.
+This is a frequentist method that reports overall P-values for every site without discarding bases with low read depth.
 Transition and transversion ratio, genotype concordance, and dbSNP are metrics for evaluating the quality of variant calls in a real pooled sequencing data application \citep{depristo2011framework}.
 
 VarScan2 \citep{Koboldt2012} is published for detecting somatic variants, loss of heterozygosity, and germline variants in exome sequencing data.
@@ -269,7 +267,7 @@ In a test of 151 ovarian tumour samples from TCGA data set, it identified 7,790 
 
 Atlas2 \citep{challis2012integrative} aims to detect SNVs in the whole exome sequencing (WES) data from the platforms of SOLiD, Illumina, and Roche 454.
 Atlas2 uses a logistic regression model to detect SNVs that pass the heuristic filters.
-It has been integrated into the Genboree for analyzing the next-generation sequencing data easily on a web-based platform.
+It has been integrated into the Genboree for easily processing the next-generation sequencing data on a web-based platform.
 
 Shimmer \citep{Hansen2013},
 
