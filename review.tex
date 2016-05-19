@@ -217,17 +217,24 @@ Virmid \citep{Kim2013} is implemented for somatic variant detection using the id
 Maximum likelihood estimation is used for sample impurity estimation and joint genotype probability estimation, and Bayesian inference is used for variant detection.
 The strategy of estimating the level of contamination helps to reduce computational running time and increase accuracy in variant detection.
 
-FamSeq \citep{Peng2013},
+FreeBayes \citep{Garrison2012} is a haplotype-based variant detection method for short read DNA sequencing data.
+It is a generalization of a Bayesian statistical method \citep{marth1999general} to detect variants in both individual and pooled samples.
+A gradient ascent method is employed to establish a maximum a posteriori (MAP) estimate of the genotype for each sample.
+This framework is able to identify longer and multi-alleles by modelling multiallelic site.
 
+CRISP \citep{Bansal2010} method identifies both rare and common variants in pooled sequencing samples.
+It is a probabilistic method that computes a contingency table P-value and a quality-based P-value that represent the probability of the absence of a variant and can then be used to differentiate true variants from sequencing errors.
+CRISP is able to detect a 2\% allele frequency event in a dataset of two pools with 25 individuals each.
+
+EBCall \citep{Shiraishi2013} is proposed to detect somatic variants by incorporating sequencing errors as prior information into the model.
+It is developed based on an empirical Bayesian framework where Beta-Binomial distribution is used to depict sequencing errors.
+EBCall can detect somatic variants of less than 10\% allele frequencies in tumour subclones. 
+
+FamSeq \citep{Peng2013},
 
 EM-SNP \citep{Chen2013},
 
-
-EBCall \citep{Shiraishi2013},
-
 Snape \citep{Raineri2012},
-
-FreeBayes \citep{Garrison2012},
 
 SOAPsnp \citep{Li2009},
 
@@ -241,7 +248,6 @@ SPLINTER \citep{Spencer2014},
 
 QQ-SNV \citep{VanderBorght2015},
 
-CRISP \citep{Bansal2010}.
 
 Seurat \citep{Christoforides2013}
 
