@@ -142,55 +142,51 @@ We discuss every method from three aspects: specific purpose of the method, cate
     \textbf{Category} & \multicolumn{1}{l}{\textbf{Method}} \\
     \midrule
     \textbf{Probabilistic} & \multicolumn{1}{l}{\textbf{Bayesian Decision Rules}} \\
-          & \multicolumn{1}{l}{GATK} \\
-          & \multicolumn{1}{l}{SAMTools} \\
-          & \multicolumn{1}{l}{Mutect} \\
-          & \multicolumn{1}{l}{FamSeq} \\
+          & \multicolumn{1}{l}{\quad GATK} \\
+          & \multicolumn{1}{l}{\quad SAMTools} \\
+          & \multicolumn{1}{l}{\quad Mutect} \\
+          & \multicolumn{1}{l}{\quad FamSeq} \\
           & \multicolumn{1}{l}{\textbf{Bayesian Estimation}} \\
-          & \multicolumn{1}{l}{ Virmid} \\
-          & \multicolumn{1}{l}{ EM-SNP} \\
-          & \multicolumn{1}{l}{\textbf{Hierarchical/Empirical Bayesian Model}} \\
-          & \multicolumn{1}{l}{JointSNVMix} \\
-          & \multicolumn{1}{l}{SomaticSniper} \\
-          & \multicolumn{1}{l}{Strelka} \\
-          & \multicolumn{1}{l}{RVD} \\
-          & \multicolumn{1}{l}{RVD2} \\
-          & \multicolumn{1}{l}{Variational RVD} \\
-          & \multicolumn{1}{l}{EBCall} \\
-          & \multicolumn{1}{l}{Snape} \\
-          & \multicolumn{1}{l}{FreeBayes} \\
-          & \multicolumn{1}{l}{Seurat} \\
-          & \multicolumn{1}{l}{SOAPsnp} \\
-          & \multicolumn{1}{l}{SNVMix} \\
-          & \multicolumn{1}{l}{EBM} \\
+          & \multicolumn{1}{l}{\quad Virmid} \\
+          & \multicolumn{1}{l}{\quad EM-SNP} \\
+          & \multicolumn{1}{l}{\textbf{Hierarchical/Empirical Bayesian}} \\
+          & \multicolumn{1}{l}{\quad JointSNVMix} \\
+          & \multicolumn{1}{l}{\quad SomaticSniper} \\
+          & \multicolumn{1}{l}{\quad Strelka} \\
+          & \multicolumn{1}{l}{\quad RVD/RVD2/Variational RVD} \\
+          & \multicolumn{1}{l}{\quad EBCall} \\
+          & \multicolumn{1}{l}{\quad Snape} \\
+          & \multicolumn{1}{l}{\quad FreeBayes} \\
+          & \multicolumn{1}{l}{\quad Seurat} \\
+          & \multicolumn{1}{l}{\quad DeepSNV} \\
+          & \multicolumn{1}{l}{\quad SOAPsnp} \\
+          & \multicolumn{1}{l}{\quad SNVMix} \\
+          & \multicolumn{1}{l}{\quad EBM} \\
           & \multicolumn{1}{l}{\textbf{Large Deviation Theory}} \\
-          & \multicolumn{1}{l}{SNPSeeker} \\
-          & \multicolumn{1}{l}{SPLINTER} \\
+          & \multicolumn{1}{l}{\quad SNPSeeker} \\
+          & \multicolumn{1}{l}{\quad SPLINTER} \\
           & \multicolumn{1}{l}{\textbf{Prababilistic Linear Classifier }} \\
-          & \multicolumn{1}{l}{QQ-SNV} \\
+          & \multicolumn{1}{l}{\quad QQ-SNV} \\
           & \multicolumn{1}{l}{\textbf{Contingency Table }} \\
-          & \multicolumn{1}{l}{CRISP} \\
+          & \multicolumn{1}{l}{\quad CRISP} \\
           \midrule
     \textbf{Non-probabilistic} & \multicolumn{1}{l}{\textbf{Frequentist Method}} \\
-    \textbf{Other combination} & \multicolumn{1}{l}{SNVer} \\
+    \textbf{or other combination} & \multicolumn{1}{l}{\quad SNVer} \\
          & \multicolumn{1}{l}{\textbf{Heuristic Method}} \\
-         & \multicolumn{1}{l}{VarScan2} \\
-         & \multicolumn{1}{l}{Shimmer} \\
-         & \multicolumn{1}{l}{\textbf{Mapping Quality}} \\
-         & \multicolumn{1}{l}{MAQ} \\
+         & \multicolumn{1}{l}{\quad VarScan2} \\
+         & \multicolumn{1}{l}{\quad Shimmer} \\
+         %& \multicolumn{1}{l}{\textbf{Mapping Quality}} \\
+         %& \multicolumn{1}{l}{\quad MAQ} \\
          & \multicolumn{1}{l}{\textbf{Machine Learning}} \\
-         & \multicolumn{1}{l}{Atlas2} \\
-         & \multicolumn{1}{l}{Random Forests} \\
-         & \multicolumn{1}{l}{Bayesian Additive Regression Trees} \\
-         & \multicolumn{1}{l}{Support Vector Machines} \\
-         & \multicolumn{1}{l}{Logistic Regression} \\
+         & \multicolumn{1}{l}{\quad Atlas2} \\
+         & \multicolumn{1}{l}{\quad Feature-based methods} \\
     \bottomrule
     \end{tabular}
 \end{table}
 
 
 \subsection{Probabilistic Methods}
-We summary 21 variant detection methods that are developed based on probabilistic strategy in detail.
+We summary 22 variant detection methods that are developed based on probabilistic strategy in detail.
 
 GATK ~\citep{McKenna2010} is designed for detecting germline variants in homogeneous samples.
 It uses a simple Bayesian genotyper to calculate the posterior distribution of each genotype given mapped reads over each site ~\citep{depristo2011framework}.
@@ -205,7 +201,7 @@ It is built on a Bayesian classifier to calculate a log-likelihood ratio that ca
 It has been shown that MuTect is more sensitive than other competing methods in detecting somatic variants within low fraction of tumour cells, which enables us to discover subclonal drivers for tumour progression.
 
 SomaticSniper ~\citep{Larson2012} detects somatic variants by directly comparing the joint diploid genotype likelihoods for a tumour-normal pair.
-The genotype likelihood is calculated using MAQ method ~\citep{Li2008} by  incorparating the dependency of the genotypes between tumour and normal samples.
+The genotype likelihood is calculated using MAQ method ~\citep{Li2008} by incorporating the dependency of the genotypes between tumour and normal samples.
 Sensitivity and precision are employed to evaluate the performance of variant detection on a simulated data set.
 
 Strelka ~\citep{Saunders2012} is an algorithm for somatic variant detection in a joint analysis of matched tumour and normal samples.
@@ -215,7 +211,7 @@ Strelka is capable to maintain high sensitivity in low purity tumour samples.
 JointSNVMix ~\citep{Roth2012} is introduced to discover somatic point variants and distinguish germline from somatic events.
 It applies two novel Bayesian probabilistic models to jointly analyze the allelic count of tumour and normal samples.
 Concordance is used as a probabilistic threshold to measure the performance of variant detection.
-Is has been demonstrated that the joint modelling, JointSNVMix, has higher specificity than its independent analogue with guaranteed sensitivity.
+Is has been demonstrated that the joint modeling, JointSNVMix, has higher specificity than its independent analogue with guaranteed sensitivity.
 
 Virmid ~\citep{Kim2013} is implemented for somatic variant detection using the idea of estimating the level of sample contamination.
 Maximum likelihood estimation is used for sample impurity estimation and joint genotype probability estimation, and Bayesian inference is used for variant detection.
@@ -224,11 +220,11 @@ The strategy of estimating the level of contamination helps to reduce computatio
 FreeBayes ~\citep{Garrison2012} is a haplotype-based variant detection method for short read DNA sequencing data.
 It is a generalization of a Bayesian statistical method ~\citep{marth1999general} to detect variants in both individual and pooled samples.
 A gradient ascent method is employed to establish a maximum a posteriori (MAP) estimate of the genotype for each sample.
-This framework is able to identify longer and multi-alleles by modelling multiallelic site.
+This framework is able to identify longer and multi-alleles by modeling multiallelic site.
 
 CRISP ~\citep{Bansal2010} method identifies both rare and common variants in pooled sequencing samples.
 It is a probabilistic method that computes a contingency table P-value and a quality-based P-value that represent the probability of the absence of a variant and can then be used to differentiate true variants from sequencing errors.
-CRISP is able to detect a 2\% allele frequency event in a dataset of two pools with 25 individuals each.
+CRISP is able to detect a 2\% allele frequency event in a data set of two pools with 25 individuals each.
 
 EBCall ~\citep{Shiraishi2013} is proposed to detect somatic variants by incorporating sequencing errors as prior information into the model.
 It is developed based on an empirical Bayesian framework where Beta-Binomial distribution is used to depict sequencing errors.
@@ -250,22 +246,32 @@ SOAPsnp ~\citep{Li2009} is a variant detection method that is designed for massi
 It uses a Bayesian statistical model to infer the likelihood of each possible genotype and outputs the genotype with highest posterior proabability for each site.
 it achieves high accuracy in a human genome deep resequencing data and incorparating dbSNP genotypes as prior information helps with identify real heterozygotes in low read depth data.
 
-SNVMix ~\citep{Goya2010},
+SNVMix ~\citep{Goya2010} is a probabilistic method to detect SNVs from tumour NGS data.
+It is developed based on Binomial mixture models and an expectation maximization algorithm is used to obtain model parameters to predict allele frequencies.
+It is demonstrated with high sensitivity and specificity on a breast cancer data set of $> 40 \times$ that the ground truth of SNVs is known.
 
-EBM ~\citep{Zhou2012},
+EBM ~\citep{Zhou2012} aims to detect SNVs in pooled sequencing data by accurately estimating the sequencing error distribution across multiple pools and genomic positions. 
+It is a empirical Bayes mixture model and an expectation-conditional maximization (ECM) algorithm is used for model inference and parameter estimation.
+It is demonstrated with lower sum of squared errors of the estimated allele frequencies compared with a naive estimator.
 
-SNPSeeker ~\citep{Druley2009},
+SNPSeeker ~\citep{Druley2009} used the large deviation theory to detect SNVs from large pool of multiple individuals.
+Negative control data is necessary for model estimation.
+It is able to detect the SNVs that present with lower allele frequencies than the error rate of the sequencing platform.
 
-SPLINTER ~\citep{Spencer2014},
+SPLINTER ~\citep{Spencer2014} is based on the large deviation theory to detect rare alleles in pooled sequencing samples.
+This research shows that over $500 \times$ coverage is a guarantee for an ideal performance to detect low frequency variants ($25\% - 2.5\%$) on a synthetic DNA mixture of HapMap samples.
+It also reveals that SPLINTER has acceptable specificity and positive predictive value (PPV) in clinical sequencing regions.
 
-QQ-SNV ~\citep{VanderBorght2015},
+QQ-SNV ~\citep{VanderBorght2015} is developed to differentiate true SNVs from errors using the quantiles of the quality scores.
+Instead of modeling the position-specific allele frequency, a logistic regression classifier model is used to classify a position as a variant or an error by incorporating the Illumina quality scores.
+QQ-SNV shows a sensitivity of $100\%$ and a specificity of $100\%$ when tested on a paired-end HCV clinical sample where the true frequency of the lowest spiked-in is $0.5\%$.
 
 Seurat ~\citep{Christoforides2013} aims to detect somatic events, including SNVs, insertion/deletions, and structural variations, within tumors in paired tumor and normal samples.
 Seurat is a generalized Bayesian framework that uses a beta-binomial distribution to model the probability of a somatic event.
 Seurat shows high transition/transversion ratio, low non-synonymous/synonymous ratio, and low dbSNP rate on a lymphoma tumor data set, which demonstrates that Seurat has high specificity.
 
 DeepSNV ~\citep{gerstung2012reliable} is a powerful statistical method for detecting SNVs in ultra-deep sequencing data.
-This algorithm is built on a hierarchical beta-binomical model and a likelihood ratio test is calculated for each base for comparison with a control or a reference.
+This algorithm is built on a hierarchical beta-binomial model and a likelihood ratio test is calculated for each base for comparison with a control or a reference.
 DeepSNV is validated on subclonal diverse tumour samples of renal cell carcinoma and reveals an agreement of the variant allele frequencies of the variants with the original work ~\citep{gerstung2012reliable}.
 
 We previously developed a Beta-Binomial model, RVD ~\citep{Flaherty2012}, to characterize error rate distribution of each site of the next-generation sequencing data.
@@ -277,7 +283,7 @@ Variational EM algorithm is demonstrated with comparable sensitivity and specifi
 
 
 \subsection{Non-probabilistic Methods}
-We summary 6 variant detection methods that are developed based on non-probabilistic or other combination methods.
+We summary 5 variant detection methods that are developed based on non-probabilistic or other combination methods.
 
 SNVer ~\citep{Wei2011} is a common and rare variant detection method for both individual and pooled sequencing data and it is scalable for whole genome sequencing data.
 This is a frequentist method that reports overall P-values for every site without discarding bases with low read depth.
@@ -296,12 +302,11 @@ Atlas2 ~\citep{challis2012integrative} aims to detect SNVs in the whole exome se
 Atlas2 uses a logistic regression model to detect SNVs that pass the heuristic filters.
 It has been integrated into the Genboree for easily processing the next-generation sequencing data on a web-based platform.
 
-MAQ ~\citep{Li2008},
+%MAQ ~\citep{Li2008},
 
-Random Forests ~\citep{Ding2012},
-Bayesian Additive Regression Trees ~\citep{Ding2012},
-Support Vector Machines ~\citep{Ding2012},
-Logistic Regression ~\citep{Ding2012}.
+\citet{Ding2012} implemented four feature-based classifiers, random forests, Bayesian additive regression trees, support vector machines, and logistic regression, to detect somatic variants in tumour-normal paired data set.
+Supervised machine leaning algorithms are trained on the ground truth data set of $\sim 3400$ positions from $48$ breast cancer exome sequences and a cross-validation analysis is used to measure the accuracy.
+It shows that the feature-based machine learning algorithms outperform Samtools and GATK in both sensitivity and specificity in this data set.
 
 
 \bibliography{bib}
