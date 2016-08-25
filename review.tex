@@ -232,6 +232,7 @@ We discuss every method from three aspects: specific purpose of the method, cate
           & GATK  & SNVs, indels   & Java  & https://www.broadinstitute.org/gatk/ & \citealt{McKenna2010} \\
           & Mutect & SNVs  & Java  & http://www.broadinstitute.org/cancer/cga/mutect & \citealt{Cibulskis2013} \\
           & SAMTools & SNVs, indels  & C     & http://samtools.sourceforge.net/ & \citealt{Li2009a} \\
+          & MAQ & SNVs & Perl & http://maq.sourceforge.net/ & \citealt{Li2008}\\
           & FamSeq & SNVs  & C++   & http://bioinformatics.mdanderson.org/main/FamSeq &  \citealt{Peng2013}\\
           & JointSNVMix & SNVs  & Python & http://compbio.bccrc.ca/software/jointsnvmix/ & \citealt{Roth2012} \\
           & \textbf{Bayesian Estimation} &       &       &       &  \\
@@ -288,9 +289,12 @@ We summary 22 variant detection methods that are developed based on probabilisti
 It uses a simple Bayesian genotyper to calculate the posterior distribution of each genotype given mapped reads over each site ~\citep{depristo2011framework}.
 It adopted a MapReduce system to facilitate processing large-scale sequencing data in parallel and has been involved in 1000 Genomes Project and The Cancer Genome Atlas.
 
-\textbf{SAMtools} ~\citep{Li2009a} is implemented to manipulate the genomic sequences in the SAM and BAM format.
+Mapping and assemblly with quality (\textbf{MAQ}) ~\citep{Li2008} is a probabilistic method that used a fixed prior for estimation of non-reference allele probabilities.
+\textbf{SAMtools} ~\citep{Li2009a} is a revised MAQ model to manipulate the genomic sequences in the SAM and BAM format.
 Similar to GATK, SAMtools computes the likelihood of each possible genotype using a naive Bayesian model and then identifies germline variants using BCFtools ~\citep{li2011statistical}.
 It has been demonstrated for comparable accuracy in real data for allele count estimation, allele frequency estimation, and association mapping.
+\textbf{glftools} ~\citep{abecasis2010} is a revised version of SAMtools to generate genotype likelihood files.
+Single individual, glfSingle and mltiple individuals, glfMultiples are developed for genotype calling as well.
 
 \textbf{MuTect} ~\citep{Cibulskis2013} is a method to detect germline and somatic variants with low allele frequencies at various sequencing read depths in mixed tumour samples.
 It is built on a Bayesian classifier to calculate a log-likelihood ratio that can be used as a threshold for variant detection in matched tumour and normal samples.
@@ -398,15 +402,24 @@ Its advantage is to be sensitive to detect variants in highly heterogeneous tumo
 Atlas2 uses a logistic regression model to detect SNVs that pass the heuristic filters.
 It has been integrated into the Genboree for easily processing the next-generation sequencing data on a web-based platform.
 
-%MAQ ~\citep{Li2008},
 
 \citet{Ding2012} implemented four feature-based classifiers, random forests, Bayesian additive regression trees, support vector machines, and logistic regression, to detect somatic variants in tumour-normal paired data set.
 Supervised machine leaning algorithms are trained on the ground truth data set of $\sim 3400$ positions from $48$ breast cancer exome sequences and a cross-validation analysis is used to measure the accuracy.
 It shows that the feature-based machine learning algorithms outperform Samtools and GATK in both sensitivity and specificity in this data set.
 
 
+
 \subsection{Advantages and disadvantages of different methods}
-We summarize seven comparative researches on variant detection methods in Table \ref{tbl:comparison}.
+Researchers are trying to compare the performances of the current variant detection methods in different applications based on their interests.
+We summarize seven comparative analysis on variant detection methods in tumor-normal paired NGS data in Table \ref{tbl:comparison} in order to help people to select a method for their specific purpose.
+These comparisons mostly focus on the performances of VarScan, MuTect, GATK, SAMtools, JointSNVMix, SomaticSniper, and Strelka.
+Synthetic or real WGS/WES data are used as benchmarking data sets for validation.
+These results show that VarScan2 can detect more variants than other methods, but may yield more false positives.
+The performance depends on the attributes of the specific data set and the ability of a method in calling variants in heterogeneous samples.
+Overall, muTect outperformed other tested methods in detecting rare variants with low allele frequency and showed high sensitivity at different dilutions.
+Receiver operating characteristic (ROC) curves can be used to characterize sensitivity and specificity for method evaluation ~\citep{Xu2014, Huang2015}.
+
+
 
 
 \begin{landscape}
@@ -416,37 +429,45 @@ We summarize seven comparative researches on variant detection methods in Table 
   \caption{A summary of comparative analysis of variant detection methods.}\label{tbl:comparison}
   \begin{threeparttable}
     \begin{tabular}{rlrr}
-    \multicolumn{1}{l}{\textbf{Benchmarking data set}} & \textbf{Compared methods} & \multicolumn{1}{l}{\textbf{Advantages/Disadvantages}} & \multicolumn{1}{l}{\textbf{Ref}} \\
+    \multicolumn{1}{l}{\textbf{Benchmarking data sets}} & \textbf{Compared methods} & \multicolumn{1}{l}{\textbf{Advantages/Disadvantages}} & \multicolumn{1}{l}{\textbf{Ref}} \\
     \toprule
     \multicolumn{1}{l}{Illumina WES  CML} & VarScan & \multicolumn{1}{l}{Unable to detect rare variants of low allele frequency.} & \citealt{Roberts2013} \\
           & JointSNVMix & \multicolumn{1}{l}{Vulnerable to FPs.} &  \\
           & SomaticSniper, Strelka & \multicolumn{1}{l}{Gave the best performance.} &  \\
-    \midrule
-    \multicolumn{1}{l}{Illumina WGS SSMP} & GATK, SAMtools & \multicolumn{1}{l}{Had the lowest FDR at 5$\times$ read depth.} &  \citealt{Cheng2014}\\
-    \multicolumn{1}{l}{with rare, low and common VAFs} & CASAVA & \multicolumn{1}{l}{Had highest accuracy at 30$\times$ read depth.} &  \\
-    \multicolumn{1}{l}{at 5$\times$, 10$\times$, 20$\times$, and 30$\times$ } & VarScan, glfTools, SOAPsnp &       &  \\
-    \midrule
-    \multicolumn{1}{l}{Synthetic DNA mixtures } & SAMtools & \multicolumn{1}{l}{Had the lowest sensitivity.} &  \citealt{Spencer2014}\\
-    \multicolumn{1}{l}{with 2.5\% to 25\% VAFs at $>$ 1000$\times$ } & GATK,  SPLINTER & \multicolumn{1}{l}{Detected more than 94\% of variants with 10\% VAFs.} &  \\
-          & VarScan2 & \multicolumn{1}{l}{Yielded more FPs at high read depths.} &  \\
-    \midrule
-    \multicolumn{1}{l}{Synthetically pooled Illumina sequencing} & GATK, CRISP, LoFreq & \multicolumn{1}{l}{Showed 80\% accuracy with different read depths.} & \citealt{Huang2015} \\
-          & VarScan, SNVer  & \multicolumn{1}{l}{Showed lower FPR but lower Sensitivity.} &  \\
+
     \midrule
     \multicolumn{1}{l}{Illumina WGS Melanoma } & VarScan2 & \multicolumn{1}{l}{Detected more somatic variants than others.} &  \citealt{wang2013detecting} \\
     \multicolumn{1}{l}{Illumina WES lung tumor} & MuTect & \multicolumn{1}{l}{Detected most somatic variants of low allele frequency.} &  \\
           & EBCall, JointSNVMix, Strelka, VarScan2 & \multicolumn{1}{l}{Had lower accuracy compared with VarScan2 and MuTect.} &  \\
-    \midrule
-    \multicolumn{1}{l}{WES with VAFs of 8\%, 16\%, 36\%, and 50\%} & MuTect, Strelka & \multicolumn{1}{l}{Showed highest sensitivity.} &  \citealt{Xu2014}\\
-    \multicolumn{1}{l}{Amplicon with VAFs of 8\%, 16\%, 36\%, and 100\%} & GATK, SomaticSniper, VarScan2 & \multicolumn{1}{l}{Sensitivities changed with VAFs.} &  \\
+
     \midrule
     \multicolumn{1}{l}{Synthetic WGS} & GATK  & \multicolumn{1}{l}{Showed highest specificity and Ti/Tv ratio at single-sample. } &  \citealt{liu2013variant}\\
           &       & \multicolumn{1}{l}{Showed higher sensitivity than SAMtools at multiple-sample.} &  \\
           & SAMtools, glftools, Atlas2 &       &  \\
+
+    \midrule
+    \multicolumn{1}{l}{Illumina WGS SSMP} & GATK, SAMtools & \multicolumn{1}{l}{Had the lowest FDR at 5$\times$ read depth.} &  \citealt{Cheng2014}\\
+    \multicolumn{1}{l}{with rare, low, and common VAFs} & CASAVA & \multicolumn{1}{l}{Had highest accuracy at 30$\times$ read depth.} &  \\
+    \multicolumn{1}{l}{at 5$\times$, 10$\times$, 20$\times$, and 30$\times$ } & VarScan, glftools, SOAPsnp &       &  \\
+
+    \midrule
+    \multicolumn{1}{l}{Synthetic DNA mixtures } & SAMtools & \multicolumn{1}{l}{Had the lowest sensitivity.} &  \citealt{Spencer2014}\\
+    \multicolumn{1}{l}{with 2.5\% to 25\% VAFs at $>$ 1000$\times$ } & GATK,  SPLINTER & \multicolumn{1}{l}{Detected more than 94\% of variants with 10\% VAFs.} &  \\
+          & VarScan2 & \multicolumn{1}{l}{Yielded more FPs at high read depths.} &  \\
+
+    \midrule
+    \multicolumn{1}{l}{WES with VAFs of 8\%, 16\%, 36\%, and 50\%} & MuTect, Strelka & \multicolumn{1}{l}{Showed highest sensitivity.} &  \citealt{Xu2014}\\
+    \multicolumn{1}{l}{Amplicon with VAFs of 8\%, 16\%, 36\%, and 100\%} & GATK, SomaticSniper, VarScan2 & \multicolumn{1}{l}{Sensitivities changed with VAFs.} &  \\
+
+    \midrule
+    \multicolumn{1}{l}{Synthetically pooled Illumina sequencing} & GATK, CRISP, LoFreq & \multicolumn{1}{l}{Showed 80\% accuracy with different read depths.} & \citealt{Huang2015} \\
+          & VarScan, SNVer  & \multicolumn{1}{l}{Showed lower FPR but lower sensitivity.} &  \\
+
     \bottomrule
     \end{tabular}
    \begin{tablenotes}
-	\item CML, chronic myeloid leukaemia;
+	\item The order of these methods are based on the published date.
+CML, chronic myeloid leukaemia;
 WGS, whole genome sequencing;
 FPs, false positives;
 VAFs, variant allele frequencies;
