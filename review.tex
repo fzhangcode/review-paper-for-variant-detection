@@ -92,33 +92,55 @@ Finally, tumor-associated variants are obtained and can be further interpreted f
 
 \section{Why do we need a sensitive variant detection method?}
 
-\subsection{Motivation}
-Most variants are revealed to be rare by 1000 Genomes ~\citep{10002010map} and rare variants do cause risk of disease or have large effects ~\citep{kosmicki2016discovery}.
-
 \subsection{Biological impacts}
+
+The cost of whole-genome sequence (WGS) or whole-exome sequence (WES) has been reduced to below $\$1000$, which has made it possible to have a deeper understanding of the structure of genomes to improve the effectiveness of disease treatment. 
+The bottleneck of large-scale sequencing is accurate and efficient data analysis rather than data generation.
+Most variants revealed by the WGS and WES are demonstrated to be rare by 1000 Genomes ~\citep{10002010map} and rare variants do cause risk of disease or have large effects ~\citep{kosmicki2016discovery}.
+The oseltamivir resistance variant, H275Y, exists in a fraction of $0.18\%$ in a clinical sample ~\citep{Flaherty2012}.
+A accurate and sensitive variant detection method is needed to identify this causal variant to improve the efficacy of antiviral therapy.
+Detection of variants in low fraction of cfDNA will be effective and efficient in monitoring tumor progression, which will be a complement to the cancer tissue biopsies.
+A pilot study has shown the feasibility of leukemic cfDNA to be used to resolve DNA abnormalities ~\citep{zhou2014pilot}.
+Therefore, a sensitive computational method is a critical step to accelerate rare variants detection and interpretation in the cfDNA data in order to derive further biological inference.
 
 
 \subsection{Statistical accuracy}
-Since the allele frequency of rare variants is low, it needs high statistical power to identify rare variants especially when the sample size is not large.
 
-What is the payoff for spending time and energy on this problem.
+Since the allele frequency of rare variants in the public genomes data is relatively low, it needs methods with high statistical power to identify rare variants in impure samples. 
+It is also difficult to guarante statistical accuracy for low or moderate sequencing read depths because simple strategies based on cutoffs for counting alleles may lead to wrong prediction.
+To achieve high statistical accuracy, statistical and probabilistic methods have been appeared and mature in providing measures of uncertainty for genotypes inference in variant detection ~\citep{Nielsen2011}.  
+Specifically, Bayesian statistical methods are popular for developing sensitive variant detection tools by incorporating proper prior probabilities of possible genotypes and afterwards predict the true genotype using a maximum a posteriori probability (MAP).
+Several studies have used a binomial probabilistic distribution to model the sequencing error distribution that can be further used to differentiate errors from the true biological variants ~\citep{Flaherty2012, Shiraishi2013, gerstung2012reliable, Christoforides2013}.
 
 
-
-%\subsection{Variants}
-%\subsubsection{Germline, somatic, or LOH (loss of heterozygosity)}
-%\subsubsection{Rare and common variants}
 
 \section{Hallmarks of a good variant detection method}
+
 \subsection{Accuracy}
+
+Accuracy is normally taken as the first criteria to evaluate the performance of a variant detection method.
+
+choose proper prior 
 
 \subsection{Scalability}
 
+Much efforts have been devoted to improve the scalability since analyzing the NGS sequencing data, especially those WGS and WES data, is truly time consuming.
+Performing statistical inference and estimation for statistical variant detection methods, such as Bayesian and heuristic, is a process of drawing conclusions of variant detection from the data. 
+MCMC sampling algorithm is comprehensively used for statistical inference, but the limitation of MCMC is that the time to converge can be long and the convergence can be hard to diagnose.
+Alternatively, variational approxiamtion algorithm converges faster than the MCMC sampling algorithm because it yields deterministic approximation that provides buonds on probability of interest instead of stochastic sampling ~\citep{jordan1999introduction}.
+For example, mean field algorithm is a variational approximation method which is demonstrated to be 10 to 30 times faster than the MCMC sampling while producing the same accuracy ~\citep{peterson1989explorations}.
+\citet{flaherty2005latent} has used a variational algorithm to estimate the model for chemogenomic profiling.
+However, from the perspective of parallel programming, sampling-based methods are easy to be ditributed to multiple computing cores in parallel even though the algorithm itself is computationally slow.
+There has to be a tradeoff between accuracy and scalability and accuracy generally takes priority over scalaility.
+Balance of accuracy and scalability often depends on specific purposes and resources.
+
 \subsection{Robustness}
 
-Tradeoff between accuracy and scalability.
+The ability to handle noise, contaminate data
 
-It depends on specific purposes.
+Robust Bayesian analysis about sensitivity of Bayesian to study the uncertainty of prior distributions.
+
+
 
 \section{Factors that affect the ability of variant detection methods}
 The next-generation sequencing data is massive and heterogeneous and many factors could influence the performance of a variant detection method.
@@ -232,8 +254,8 @@ We discuss every method from three aspects: specific purpose of the method, cate
           & GATK  & SNVs, indels   & Java  & https://www.broadinstitute.org/gatk/ & \citealt{McKenna2010} \\
           & Mutect & SNVs  & Java  & http://www.broadinstitute.org/cancer/cga/mutect & \citealt{Cibulskis2013} \\
           & SAMTools & SNVs, indels  & C     & http://samtools.sourceforge.net/ & \citealt{Li2009a} \\
-          & MAQ & SNVs & Perl & http://maq.sourceforge.net/ & \citealt{Li2008}\\
           & FamSeq & SNVs  & C++   & http://bioinformatics.mdanderson.org/main/FamSeq &  \citealt{Peng2013}\\
+          & MAQ & SNVs & Perl & http://maq.sourceforge.net/ & \citealt{Li2008}\\
           & JointSNVMix & SNVs  & Python & http://compbio.bccrc.ca/software/jointsnvmix/ & \citealt{Roth2012} \\
           & \textbf{Bayesian Estimation} &       &       &       &  \\
           & Virmid & SNVs  & Java  & https://sourceforge.net/projects/virmid/ & \citealt{Kim2013} \\
@@ -251,7 +273,8 @@ We discuss every method from three aspects: specific purpose of the method, cate
           & SOAPsnp & SNVs  & C, C++ & http://soap.genomics.org.cn/soapsnp.html &  \citealt{Li2009}\\
           & Seurat & SNVs  & Java  & https://sites.google.com/site/seuratsomatic/ &  \citealt{Christoforides2013}\\
           & \textbf{Likelihood-based} &       &       &       &  \\      
-          & glfTools & SNVs  & C, C++  & csg.sph.umich.edu//abecasis/glfTools/ &  \citealt{abecasis2010}\\              
+          & glfTools & SNVs  & C, C++  & csg.sph.umich.edu//abecasis/glfTools/ &  \citealt{abecasis2010}\\    
+          & PolyMutt & SNVs, indels  & C++  & http://genome.sph.umich.edu/wiki/Polymutt &  \citealt{li2012likelihood}\\           
           & \textbf{Large Deviation Theory} &       &       &       &  \\
           & SNPSeeker & SNVs  & C     & http://genetics.wustl.edu/rmlab/software/ &  \citealt{Druley2009}\\
           & SPLINTER & SNVs, indels & C, C++ & available on request &  \citealt{Spencer2014}\\
@@ -289,6 +312,10 @@ We summary 22 variant detection methods that are developed based on probabilisti
 It uses a simple Bayesian genotyper to calculate the posterior distribution of each genotype given mapped reads over each site ~\citep{depristo2011framework}.
 It adopted a MapReduce system to facilitate processing large-scale sequencing data in parallel and has been involved in 1000 Genomes Project and The Cancer Genome Atlas.
 
+\textbf{MuTect} ~\citep{Cibulskis2013} is a method to detect germline and somatic variants with low allele frequencies at various sequencing read depths in mixed tumour samples.
+It is built on a Bayesian classifier to calculate a log-likelihood ratio that can be used as a threshold for variant detection in matched tumour and normal samples.
+It has been shown that MuTect is more sensitive than other competing methods in detecting somatic variants within low fraction of tumour cells, which enables us to discover subclonal drivers for tumour progression.
+
 Mapping and assemblly with quality (\textbf{MAQ}) ~\citep{Li2008} is a probabilistic method that used a fixed prior for estimation of non-reference allele probabilities.
 \textbf{SAMtools} ~\citep{Li2009a} is a revised MAQ model to manipulate the genomic sequences in the SAM and BAM format.
 Similar to GATK, SAMtools computes the likelihood of each possible genotype using a naive Bayesian model and then identifies germline variants using BCFtools ~\citep{li2011statistical}.
@@ -296,17 +323,9 @@ It has been demonstrated for comparable accuracy in real data for allele count e
 \textbf{glftools} ~\citep{abecasis2010} is a revised version of SAMtools to generate genotype likelihood files.
 Single individual, glfSingle and mltiple individuals, glfMultiples are developed for genotype calling as well.
 
-\textbf{MuTect} ~\citep{Cibulskis2013} is a method to detect germline and somatic variants with low allele frequencies at various sequencing read depths in mixed tumour samples.
-It is built on a Bayesian classifier to calculate a log-likelihood ratio that can be used as a threshold for variant detection in matched tumour and normal samples.
-It has been shown that MuTect is more sensitive than other competing methods in detecting somatic variants within low fraction of tumour cells, which enables us to discover subclonal drivers for tumour progression.
-
-\textbf{SomaticSniper} ~\citep{Larson2012} detects somatic variants by directly comparing the joint diploid genotype likelihoods for a tumour-normal pair.
-The genotype likelihood is calculated using MAQ method ~\citep{Li2008} by incorporating the dependency of the genotypes between tumour and normal samples.
-Sensitivity and precision are employed to evaluate the performance of variant detection on a simulated data set.
-
-\textbf{Strelka} ~\citep{Saunders2012} is an algorithm for somatic variant detection in a joint analysis of matched tumour and normal samples.
-It is a Bayesian method that models the joint probabilistic distribution of continuous allele frequencies.
-Strelka is capable to maintain high sensitivity in low purity tumour samples.
+\textbf{FamSeq} ~\citep{Peng2013} is a family-based sequencing program for variant detection in the data of family members.
+FamSeq uses Bayesian network to yield posterior probabilities for measure of genotype calls and MCMC sampling method to derive the posterior probabilities.
+This method integrates Mendelian inheritance and sequencing data of family members to reduce the false positive rate and false negative rate for variant detection.
 
 \textbf{JointSNVMix} ~\citep{Roth2012} is introduced to discover somatic point variants and distinguish germline from somatic events.
 It applies two novel Bayesian probabilistic models to jointly analyze the allelic count of tumour and normal samples.
@@ -317,42 +336,56 @@ Is has been demonstrated that the joint modeling, JointSNVMix, has higher specif
 Maximum likelihood estimation is used for sample impurity estimation and joint genotype probability estimation, and Bayesian inference is used for variant detection.
 The strategy of estimating the level of contamination helps to reduce computational running time and increase accuracy in variant detection.
 
+\textbf{EM-SNP} ~\citep{Chen2013} can be used for allele frequency estimation, SNVs detection and association study in pooled sequencing data.
+They developed an expectation maximization (EM) algorithm to approximate the maximum likelihood of the parameters to estimate the minor allele frequencies.
+It has been shown that EM-SNP outperforms SNVer in rare variants detection in the type 1 diabetes pooled sequencing data by comparison on the metrics of dbSNP and transition/transversion ratio.
+
+
+\textbf{SomaticSniper} ~\citep{Larson2012} detects somatic variants by directly comparing the joint diploid genotype likelihoods for a tumour-normal pair.
+The genotype likelihood is calculated using MAQ method ~\citep{Li2008} by incorporating the dependency of the genotypes between tumour and normal samples.
+Sensitivity and precision are employed to evaluate the performance of variant detection on a simulated data set.
+
+\textbf{Strelka} ~\citep{Saunders2012} is an algorithm for somatic variant detection in a joint analysis of matched tumour and normal samples.
+It is a Bayesian method that models the joint probabilistic distribution of continuous allele frequencies.
+Strelka is capable to maintain high sensitivity in low purity tumour samples.
+
 \textbf{FreeBayes} ~\citep{Garrison2012} is a haplotype-based variant detection method for short read DNA sequencing data.
 It is a generalization of a Bayesian statistical method ~\citep{marth1999general} to detect variants in both individual and pooled samples.
 A gradient ascent method is employed to establish a maximum a posteriori (MAP) estimate of the genotype for each sample.
 This framework is able to identify longer and multi-alleles by modeling multiallelic site.
 
-\textbf{CRISP} ~\citep{Bansal2010} method identifies both rare and common variants in pooled sequencing samples.
-It is a probabilistic method that computes a contingency table P-value and a quality-based P-value that represent the probability of the absence of a variant and can then be used to differentiate true variants from sequencing errors.
-CRISP is able to detect a 2\% allele frequency event in a data set of two pools with 25 individuals each.
-
 \textbf{EBCall} ~\citep{Shiraishi2013} is proposed to detect somatic variants by incorporating sequencing errors as prior information into the model.
 It is developed based on an empirical Bayesian framework where Beta-Binomial distribution is used to depict sequencing errors.
 EBCall can detect somatic variants of less than 10\% allele frequencies in tumour subclones.
 
-\textbf{FamSeq} ~\citep{Peng2013} is a family-based sequencing program for variant detection in the data of family members.
-FamSeq uses Bayesian network to yield posterior probabilities for measure of genotype calls and MCMC sampling method to derive the posterior probabilities.
-This method integrates Mendelian inheritance and sequencing data of family members to reduce the false positive rate and false negative rate for variant detection.
+\textbf{DeepSNV} ~\citep{gerstung2012reliable} is a powerful statistical method for detecting SNVs in ultra-deep sequencing data.
+This algorithm is built on a hierarchical beta-binomial model and a likelihood ratio test is calculated for each base for comparison with a control or a reference.
+DeepSNV is validated on subclonal diverse tumour samples of renal cell carcinoma and reveals an agreement of the variant allele frequencies of the variants with the original work ~\citep{gerstung2012reliable}.
 
-\textbf{EM-SNP} ~\citep{Chen2013} can be used for allele frequency estimation, SNVs detection and association study in pooled sequencing data.
-They developed an expectation maximization (EM) algorithm to approximate the maximum likelihood of the parameters to estimate the minor allele frequencies.
-It has been shown that EM-SNP outperforms SNVer in rare variants detection in the type 1 diabetes pooled sequencing data by comparison on the metrics of dbSNP and transition/transversion ratio.
+\textbf{EBM} ~\citep{Zhou2012} aims to detect SNVs in pooled sequencing data by accurately estimating the sequencing error distribution across multiple pools and genomic positions. 
+It is a empirical Bayes mixture model and an expectation-conditional maximization (ECM) algorithm is used for model inference and parameter estimation.
+It is demonstrated with lower sum of squared errors of the estimated allele frequencies compared with a naive estimator.
+
 
 \textbf{Snape} ~\citep{Raineri2012} is built to detect SNVs in pooled samples.
 It is a Bayesian method that takes into account of different priors to estimate the posterior frequency probability of SNVs.
 Snape has low false discovery rate and high power on a simulated data set that is generated by ART ~\citep{huang2012art}.
 
-\textbf{SOAPsnp} ~\citep{Li2009} is a variant detection method that is designed for massively parallel sequencing-by-synthesis Illumina Genome Analyzer data.
-It uses a Bayesian statistical model to infer the likelihood of each possible genotype and outputs the genotype with highest posterior proabability for each site.
-it achieves high accuracy in a human genome deep resequencing data and incorparating dbSNP genotypes as prior information helps with identify real heterozygotes in low read depth data.
-
 \textbf{SNVMix} ~\citep{Goya2010} is a probabilistic method to detect SNVs from tumour NGS data.
 It is developed based on Binomial mixture models and an expectation maximization algorithm is used to obtain model parameters to predict allele frequencies.
 It is demonstrated with high sensitivity and specificity on a breast cancer data set of $> 40 \times$ that the ground truth of SNVs is known.
 
-\textbf{EBM} ~\citep{Zhou2012} aims to detect SNVs in pooled sequencing data by accurately estimating the sequencing error distribution across multiple pools and genomic positions. 
-It is a empirical Bayes mixture model and an expectation-conditional maximization (ECM) algorithm is used for model inference and parameter estimation.
-It is demonstrated with lower sum of squared errors of the estimated allele frequencies compared with a naive estimator.
+\textbf{SOAPsnp} ~\citep{Li2009} is a variant detection method that is designed for massively parallel sequencing-by-synthesis Illumina Genome Analyzer data.
+It uses a Bayesian statistical model to infer the likelihood of each possible genotype and outputs the genotype with highest posterior proabability for each site.
+it achieves high accuracy in a human genome deep resequencing data and incorparating dbSNP genotypes as prior information helps with identify real heterozygotes in low read depth data.
+
+\textbf{Seurat} ~\citep{Christoforides2013} aims to detect somatic events, including SNVs, insertion/deletions, and structural variations, within tumors in paired tumor and normal samples.
+Seurat is a generalized Bayesian framework that uses a beta-binomial distribution to model the probability of a somatic event.
+Seurat shows high transition/transversion ratio, low non-synonymous/synonymous ratio, and low dbSNP rate on a lymphoma tumor data set, which demonstrates that Seurat has high specificity.
+
+\textbf{PolyMutt} ~\citep{li2012likelihood} is a likelihood based method to detect novel SNVs in samples of families.
+PolyMutt models likelihood of reads in pedigrees using the Elston-Stewart algorithm ~\citep{elston1971general}.
+It has been shown that the information from families help to improve the specificity for SNVs detection in a simulations study.
 
 \textbf{SNPSeeker} ~\citep{Druley2009} used the large deviation theory to detect SNVs from large pool of multiple individuals.
 Negative control data is necessary for model estimation.
@@ -366,13 +399,11 @@ It also reveals that SPLINTER has acceptable specificity and positive predictive
 Instead of modeling the position-specific allele frequency, a logistic regression classifier model is used to classify a position as a variant or an error by incorporating the Illumina quality scores.
 QQ-SNV shows a sensitivity of $100\%$ and a specificity of $100\%$ when tested on a paired-end HCV clinical sample where the true frequency of the lowest spiked-in is $0.5\%$.
 
-\textbf{Seurat} ~\citep{Christoforides2013} aims to detect somatic events, including SNVs, insertion/deletions, and structural variations, within tumors in paired tumor and normal samples.
-Seurat is a generalized Bayesian framework that uses a beta-binomial distribution to model the probability of a somatic event.
-Seurat shows high transition/transversion ratio, low non-synonymous/synonymous ratio, and low dbSNP rate on a lymphoma tumor data set, which demonstrates that Seurat has high specificity.
 
-\textbf{DeepSNV} ~\citep{gerstung2012reliable} is a powerful statistical method for detecting SNVs in ultra-deep sequencing data.
-This algorithm is built on a hierarchical beta-binomial model and a likelihood ratio test is calculated for each base for comparison with a control or a reference.
-DeepSNV is validated on subclonal diverse tumour samples of renal cell carcinoma and reveals an agreement of the variant allele frequencies of the variants with the original work ~\citep{gerstung2012reliable}.
+\textbf{CRISP} ~\citep{Bansal2010} method identifies both rare and common variants in pooled sequencing samples.
+It is a probabilistic method that computes a contingency table P-value and a quality-based P-value that represent the probability of the absence of a variant and can then be used to differentiate true variants from sequencing errors.
+CRISP is able to detect a 2\% allele frequency event in a data set of two pools with 25 individuals each.
+
 
 We previously developed a Beta-Binomial model, \textbf{RVD} ~\citep{Flaherty2012}, to characterize error rate distribution of each site of the next-generation sequencing data.
 RVD is able to detect a 0.1\% variant allele frequency event in a synthetic DNA data set.
@@ -414,11 +445,10 @@ Researchers are trying to compare the performances of the current variant detect
 We summarize seven comparative analysis on variant detection methods in tumor-normal paired NGS data in Table \ref{tbl:comparison} in order to help people to select a method for their specific purpose.
 These comparisons mostly focus on the performances of VarScan, MuTect, GATK, SAMtools, JointSNVMix, SomaticSniper, and Strelka.
 Synthetic or real WGS/WES data are used as benchmarking data sets for validation.
-These results show that VarScan2 can detect more variants than other methods, but may yield more false positives.
-The performance depends on the attributes of the specific data set and the ability of a method in calling variants in heterogeneous samples.
+These results of the comparative analysis show that VarScan2 can detect more variants than other methods, but may yield more false positives.
 Overall, muTect outperformed other tested methods in detecting rare variants with low allele frequency and showed high sensitivity at different dilutions.
-Receiver operating characteristic (ROC) curves can be used to characterize sensitivity and specificity for method evaluation ~\citep{Xu2014, Huang2015}.
-
+Receiver operating characteristic (ROC) curves can be used to characterize sensitivity and specificity to evaluate the performances of the methods ~\citep{Xu2014, Huang2015}.
+Since the performance depends on the attributes of the specific data set and the ability of a method in calling variants in heterogeneous samples, a combination of several state-of-the-art methods may be used together to generate an intersection of sets of the candidate variants ~\citep{liu2013variant}.
 
 
 
