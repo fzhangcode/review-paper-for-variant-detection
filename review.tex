@@ -72,7 +72,7 @@ Finally, we classify the state-of-the-art variant detection methods into the cat
 NGS of cfDNA is a non-invasive method for tumor-associated or drug resistant variants detection, which will be highly promising for detecting clinical biomarkers and monitoring therapy responses. 
 Many remarkable variants on tumor-specific genes, such as \textit{TP53}, \textit{BRAF}, and \textit{KRAS}, can be observed on cfDNA.
 \citet{shinozaki2007utility} first detected \textit{BRAF} variant V600E on cfDNA at different stages and demonstrated its clinical use for monitoring behavior of melanoma patients.
-Theses clinically relevent variants can be taken as candidate biomarkers and identification of these variants are required to monitor the response to treatment.
+Theses clinically relevant variants can be taken as candidate biomarkers and identification of these variants are required to monitor the response to treatment.
 
 We summarize the workflow of variant detection in cfDNA NGS data in Figure \ref{fig:flowchart}.
 CfDNA is first extracted from plasma where tumor cfDNA (blue curves) and normal cfDNA (green curves) are mixed together.
@@ -109,42 +109,52 @@ Therefore, a sensitive computational method is a critical step to accelerate rar
 Since the allele frequency of rare variants in the public genomes data is relatively low, it needs methods with high statistical power to identify rare variants in impure samples. 
 It is also difficult to guarante statistical accuracy for low or moderate sequencing read depths because simple strategies based on cutoffs for counting alleles may lead to wrong prediction.
 To achieve high statistical accuracy, statistical and probabilistic methods have been appeared and mature in providing measures of uncertainty for genotypes inference in variant detection ~\citep{Nielsen2011}.  
-Specifically, Bayesian statistical methods are popular for developing sensitive variant detection tools by incorporating proper prior probabilities of possible genotypes and afterwards predict the true genotype using a maximum a posteriori probability (MAP).
+Specifically, Bayesian statistical methods are popular for developing sensitive variant detection tools by incorporating proper prior probabilities of possible genotypes and then predict the true genotype using a maximum a posteriori probability (MAP).
 Several studies have used a binomial probabilistic distribution to model the sequencing error distribution that can be further used to differentiate errors from the true biological variants ~\citep{Flaherty2012, Shiraishi2013, gerstung2012reliable, Christoforides2013}.
-
 
 
 \section{Hallmarks of a good variant detection method}
 
 \subsection{Accuracy}
+Accurate detection of SNVs is essential because the detected variants that modulate chemotherapy resistance for cancer monitoring will help to find private novel variants in clinical cancer samples and suggest improved therapies.
+Accurate detection of SNVs is essential because the detected variants that modulate chemotherapy resistance for cancer monitoring will help to find private novel variants in clinical cancer samples and suggest improved therapies.
+Thus, accuracy is normally taken as the first criteria to evaluate the performance of variant detection methods.
+To evaluate accuracy, simulated sequencing data sets can be used firstly to test variant detection methods since the underlying truth is known.
+Benchmarking data sets, such as well-recognized sequencing samples, can also be performed to validate the method if available.
+Metrics must be chosen to understand the basic values of true positive (TP), false positive (FP), true negative (TN), and false negative (FN).
+A number of metrics have been used to assess the performance, such as sensitivity, specificity, and false discovery rate.
+Receiver operating characteristic (ROC) curves can be very useful to visualize and interpret the performances of various methods as ~\citep{Xu2014, Huang2015, He2015} did.
+Since each metric has its uncertainty and is related to sequence context of the data sets, the selection of desired metrics relies on specific purposes and a discussion about selecting metrics for accuracy evaluation stated in details in ~\citep{Olson2015}.
+Ideally, an accurate variant detection method should have high sensitivity and specificity with low false discovery rate in identifying variants in a practical level of mutant allele frequencies.
+Since it is impossible for statistical methods to acquire ideal accuracy in all circumstances, good variant detection methods should be capable to detect true variants without causing many positives in an acceptable sensitivity and specificity in a particular data of interest.
 
-Accuracy is normally taken as the first criteria to evaluate the performance of a variant detection method.
-
-choose proper prior 
 
 \subsection{Scalability}
 
-Much efforts have been devoted to improve the scalability since analyzing the NGS sequencing data, especially those WGS and WES data, is truly time consuming.
+Much efforts have been devoted to improve the scalability to a broader coverage of sequence analysis, such as genome-wide sequence analysis, because that will surpass traditional diagnostics by an analysis of whole genome instead of a few specific sites.
+However, detecting variants in WGS and WES data is truly time consuming and application of large-scale genomic data is hindered by the lack of scalable and efficient algorithms.
+Advanced statistical methods are being developed to estimate the non-reference allele frequency to furthermore detect true variant alleles.
 Performing statistical inference and estimation for statistical variant detection methods, such as Bayesian and heuristic, is a process of drawing conclusions of variant detection from the data. 
 MCMC sampling algorithm is comprehensively used for statistical inference, but the limitation of MCMC is that the time to converge can be long and the convergence can be hard to diagnose.
-Alternatively, variational approxiamtion algorithm converges faster than the MCMC sampling algorithm because it yields deterministic approximation that provides buonds on probability of interest instead of stochastic sampling ~\citep{jordan1999introduction}.
+Alternatively, variational approximation algorithm converges faster than the MCMC sampling algorithm because it yields deterministic approximation that provides bounds on probability of interest to accelerate variant detection process ~\citep{jordan1999introduction}.
 For example, mean field algorithm is a variational approximation method which is demonstrated to be 10 to 30 times faster than the MCMC sampling while producing the same accuracy ~\citep{peterson1989explorations}.
 \citet{flaherty2005latent} has used a variational algorithm to estimate the model for chemogenomic profiling.
-However, from the perspective of parallel programming, sampling-based methods are easy to be ditributed to multiple computing cores in parallel even though the algorithm itself is computationally slow.
-There has to be a tradeoff between accuracy and scalability and accuracy generally takes priority over scalaility.
-Balance of accuracy and scalability often depends on specific purposes and resources.
+However, from the perspective of parallel programming, sampling-based methods are easy to be distributed to multiple computing cores in parallel even though the algorithm itself is computationally slow.
+There has to be a trade-off between accuracy and scalability since accurate solutions often come at a price of low efficiency.
+Balance of accurate variant detection and efficient running time of a statistical method often depends both on your desire for true positive/negative and available computational resources.
 
-\subsection{Robustness}
+%\subsection{Robustness}
 
-The ability to handle noise, contaminate data
-
-Robust Bayesian analysis about sensitivity of Bayesian to study the uncertainty of prior distributions.
+%Robustness evaluation is important to study the ability of a variant detection to handle noise and contamination in the sequencing data. 
+%For example, robust Bayesian analysis is often conducted to study the uncertainty of prior distributions for model robustness assessment.
 
 
 
 \section{Factors that affect the ability of variant detection methods}
+
 The next-generation sequencing data is massive and heterogeneous and many factors could influence the performance of a variant detection method.
 \subsection{Quality control}
+
 The quality of the data can affect variant detection, so checking the quality of the raw data and filtering the low-confidence alleles in advance will improve the accuracy of variant detection.
 A standard tool, FastQC, is implemented for assessing the quality by generating analytical graphs.
 Low-confidence alleles can be trimmed using a standalone tool, NGS QC Toolkit ~\citep{patel2012ngs}, to prevent from making a wrong variant call.
@@ -152,6 +162,7 @@ Although filtering low-confidence alleles helps with read alignment, it is notic
 Thus, we should consider not only quality control in read mapping but also the read depth of coverage in order to ensure the accuracy of variant detection.
 
 \subsection{Depth of coverage}
+
 Sequencing depth of coverage, number of times that each base has been sequenced, contributes to the results of variant detection because sufficient depth of coverage is necessary to support an accurate variant call.
 Due to the high cost of sequencing, the depth of coverage of the sequencing data can be low (less than $10\times$) and the distribution of the read depth over each site could be not uniform.
 Previous researchers have studied the effect of coverage and revealed that high coverage data leads to high sensitivity of variant detection ~\citep{neuman2013analysis, krawitz2010microindel}.
@@ -162,6 +173,7 @@ Furthermore, unmatched sequencing read depths of case and control samples will r
 %Develop probabilistic methods to estimate the posterior probability of each site to be a variant in the low read depth data.
 
 \subsection{Sequencing errors}
+
 Intrinsic errors from next-generation sequencing platform exist in sample processing and sequencing ~\citep{Olson2015}.
 These errors may cause false positives and false negatives in the variant detection step.
 Especially, identification of variants of minor variant allele frequency (VAF) is challenging because it is difficult to differentiate a true rare variant (VAF $<$1 \%) from a common sequencing error rate (1\% $<$ VAF $<$ 3\%).
@@ -173,6 +185,7 @@ For example, a prior assignment in a probabilistic method can be subjective, whi
 This will lead a miscalling of a rare variant when comparing the allele frequencies of one site in a control/case pair.
 
 \subsection{Sample size}
+
 Multiple samples (pooled sequencing) enabled us to identify more rare variants than individual sample ~\citep{Bao2014, liu2012steps}.
 ~\citep{liu2013variant} demonstrated that GATK gives higher sensitivity for variant detection in a multiple-sample strategy than a single-sample strategy, but the specificity turned out to be decreased in multiple-sample strategy.
 The reason is that more false positives are called in larger data sets with multiple samples ~\citep{Nielsen2011}.
@@ -180,7 +193,8 @@ However, if the coverage of the multiple samples is low, the false discovery rat
 ~\citep{le2011snp} observed that large data set of multiple sequencing samples at low coverage (4-6$\times$) yields higher capability in rare variant detection compared to small data set of less sequencing samples at high coverage.
 
 \section{Classification for variant detection methods}
-We classify the state-of-the-art variant detection methods into two categories - probabilistic methods, and non-probabilistics or other combination (Table \ref{tbl:methods}).
+
+We classify the state-of-the-art variant detection methods into two categories - probabilistic methods, and non-probabilistic or other combination (Table \ref{tbl:methods}).
 We discuss every method from three aspects: specific purpose of the method, category that this method falls into, and metrics or its applications.
 
 %\begin{table}[htbp]
@@ -306,7 +320,8 @@ Platforms of languages and source code are given.
 
 
 \subsection{Probabilistic methods}
-We summary 22 variant detection methods that are developed based on probabilistic strategy in detail.
+
+We summary 23 variant detection methods that are developed based on probabilistic strategy in detail.
 
 \textbf{GATK} ~\citep{McKenna2010} is designed for detecting germline variants in homogeneous samples.
 It uses a simple Bayesian genotyper to calculate the posterior distribution of each genotype given mapped reads over each site ~\citep{depristo2011framework}.
@@ -340,7 +355,6 @@ The strategy of estimating the level of contamination helps to reduce computatio
 They developed an expectation maximization (EM) algorithm to approximate the maximum likelihood of the parameters to estimate the minor allele frequencies.
 It has been shown that EM-SNP outperforms SNVer in rare variants detection in the type 1 diabetes pooled sequencing data by comparison on the metrics of dbSNP and transition/transversion ratio.
 
-
 \textbf{SomaticSniper} ~\citep{Larson2012} detects somatic variants by directly comparing the joint diploid genotype likelihoods for a tumour-normal pair.
 The genotype likelihood is calculated using MAQ method ~\citep{Li2008} by incorporating the dependency of the genotypes between tumour and normal samples.
 Sensitivity and precision are employed to evaluate the performance of variant detection on a simulated data set.
@@ -366,7 +380,6 @@ DeepSNV is validated on subclonal diverse tumour samples of renal cell carcinoma
 It is a empirical Bayes mixture model and an expectation-conditional maximization (ECM) algorithm is used for model inference and parameter estimation.
 It is demonstrated with lower sum of squared errors of the estimated allele frequencies compared with a naive estimator.
 
-
 \textbf{Snape} ~\citep{Raineri2012} is built to detect SNVs in pooled samples.
 It is a Bayesian method that takes into account of different priors to estimate the posterior frequency probability of SNVs.
 Snape has low false discovery rate and high power on a simulated data set that is generated by ART ~\citep{huang2012art}.
@@ -376,8 +389,8 @@ It is developed based on Binomial mixture models and an expectation maximization
 It is demonstrated with high sensitivity and specificity on a breast cancer data set of $> 40 \times$ that the ground truth of SNVs is known.
 
 \textbf{SOAPsnp} ~\citep{Li2009} is a variant detection method that is designed for massively parallel sequencing-by-synthesis Illumina Genome Analyzer data.
-It uses a Bayesian statistical model to infer the likelihood of each possible genotype and outputs the genotype with highest posterior proabability for each site.
-it achieves high accuracy in a human genome deep resequencing data and incorparating dbSNP genotypes as prior information helps with identify real heterozygotes in low read depth data.
+It uses a Bayesian statistical model to infer the likelihood of each possible genotype and outputs the genotype with highest posterior probability for each site.
+it achieves high accuracy in a human genome deep resequencing data and incorporating dbSNP genotypes as prior information helps with identify real heterozygotes in low read depth data.
 
 \textbf{Seurat} ~\citep{Christoforides2013} aims to detect somatic events, including SNVs, insertion/deletions, and structural variations, within tumors in paired tumor and normal samples.
 Seurat is a generalized Bayesian framework that uses a beta-binomial distribution to model the probability of a somatic event.
@@ -395,7 +408,7 @@ It is able to detect the SNVs that present with lower allele frequencies than th
 This research shows that over $500 \times$ coverage is a guarantee for an ideal performance to detect low frequency variants ($25\% - 2.5\%$) on a synthetic DNA mixture of HapMap samples.
 It also reveals that SPLINTER has acceptable specificity and positive predictive value (PPV) in clinical sequencing regions.
 
-\textbf{QQ-SNV} ~\citep{VanderBorght2015} is developed to differentiate true SNVs from errors using the quantiles of the quality scores.
+\textbf{QQ-SNV} ~\citep{VanderBorght2015} is developed to differentiate true SNVs from errors using the quartiles of the quality scores.
 Instead of modeling the position-specific allele frequency, a logistic regression classifier model is used to classify a position as a variant or an error by incorporating the Illumina quality scores.
 QQ-SNV shows a sensitivity of $100\%$ and a specificity of $100\%$ when tested on a paired-end HCV clinical sample where the true frequency of the lowest spiked-in is $0.5\%$.
 
@@ -414,6 +427,7 @@ Variational EM algorithm is demonstrated with comparable sensitivity and specifi
 
 
 \subsection{Non-probabilistic methods}
+
 We summary 5 variant detection methods that are developed based on non-probabilistic or other combination methods.
 
 \textbf{SNVer} ~\citep{Wei2011} is a common and rare variant detection method for both individual and pooled sequencing data and it is scalable for whole genome sequencing data.
@@ -439,15 +453,14 @@ Supervised machine leaning algorithms are trained on the ground truth data set o
 It shows that the feature-based machine learning algorithms outperform Samtools and GATK in both sensitivity and specificity in this data set.
 
 
-
 \subsection{Advantages and disadvantages of different methods}
+
 Researchers are trying to compare the performances of the current variant detection methods in different applications based on their interests.
 We summarize seven comparative analysis on variant detection methods in tumor-normal paired NGS data in Table \ref{tbl:comparison} in order to help people to select a method for their specific purpose.
 These comparisons mostly focus on the performances of VarScan, MuTect, GATK, SAMtools, JointSNVMix, SomaticSniper, and Strelka.
 Synthetic or real WGS/WES data are used as benchmarking data sets for validation.
 These results of the comparative analysis show that VarScan2 can detect more variants than other methods, but may yield more false positives.
 Overall, muTect outperformed other tested methods in detecting rare variants with low allele frequency and showed high sensitivity at different dilutions.
-Receiver operating characteristic (ROC) curves can be used to characterize sensitivity and specificity to evaluate the performances of the methods ~\citep{Xu2014, Huang2015}.
 Since the performance depends on the attributes of the specific data set and the ability of a method in calling variants in heterogeneous samples, a combination of several state-of-the-art methods may be used together to generate an intersection of sets of the candidate variants ~\citep{liu2013variant}.
 
 
@@ -497,7 +510,7 @@ Since the performance depends on the attributes of the specific data set and the
     \end{tabular}
    \begin{tablenotes}
 	\item The order of these methods are based on the published date.
-CML, chronic myeloid leukaemia;
+CML, chronic myeloid leukemia;
 WGS, whole genome sequencing;
 FPs, false positives;
 VAFs, variant allele frequencies;
@@ -519,7 +532,9 @@ Ti/Tv, transition/transversion ratio.
 
 \section{Conclusions}
 
+
 \section{Acknowledgments}
+
 
 
 \bibliography{bib}
