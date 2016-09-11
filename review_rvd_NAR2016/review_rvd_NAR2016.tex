@@ -42,25 +42,17 @@ Accepted March 1, 2009}
 \maketitle
 
 \begin{abstract}
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text. Text. Text.
+Next-generation sequencing platform generated hundreds of millions of short reads to reveal genomic heterogeneity in disease samples like cancer.
+Cell-free DNA sequencing data is being used for early detection of variants in clinical samples for cancer treatment monitering.
+In the last decade, researchers are becoming more and more interested in rare variants with minor allele frequency because they are prevalent in many primary cancer types.
+Many statistical or computational methods have been developed to detect single nucleotide variants in mixed samples, but precise detection of rare single nucleotide variants is still a major challenge for clinical use.
+Even though several methods are proposed to detect very rare variants in the heterogeneous samples, each method has its bias or is only designed for a particular application of interest.
+In this review, we highlight the need for sensitive variant detection methods for cell-free DNA data and discuss the hallmarks of a good statistical method from the perspective of accuracy, scalability, and robustness.
+We list the issues, quality control, depth of coverage, sequencing errors, and sample size, and discuss how these factors impact on the power of variant detection methods.
+We classify 30 state-of-the-art methods into two categories, probabilistic and non-probabilistic, and survey every method on the aspects of specific purpose, statistical method, and metrics or applications.
+Furthermore, we summarize a basic framework about how a Bayesian-based method is developed for variant detection.
+
+
 \end{abstract}
 
 
@@ -84,26 +76,30 @@ Thus, bioinformatics methods for cfDNA sequencing analysis are more than desirab
 
 %Outline the paper here with one paragraph overview per section.
 In this review, we focus on single nucleotide variant detection in cfDNA next-generation sequencing data and classification of current computational and statistical variant detection methods.
-We first highlight the necessity of a sensitive variant detection method from the perspective of biological impacts and statistical accuracy,
-and then present the hallmarks of a good variant detection method based on the evaluation of accuracy, scalability, and robustness.
-We also discuss the issues that will effect the ability of variant detection methods.
-Finally, we classify the state-of-the-art variant detection methods into the categories of probabilistic and non-probabilistic methods and survey each method in detail.
+We first describe the flowchart of variant detection in NGS cfDNA data and then highlight the necessity of a sensitive variant detection method from the perspective of biological impacts and statistical accuracy.
+We also consider the hallmarks of a good variant detection method based on the evaluation of accuracy, scalability, and robustness.
+Furthermore, we discuss the issues that will effect the ability of variant detection methods.
+Finally, we classify the state-of-the-art variant detection methods into the categories of probabilistic and non-probabilistic methods and outline each method in detail.
+A basic framework of developing Bayesian-based method for variant detection is described as well.
+In conclusion, we discuss the challenges and opportunities of statistical methods for variant detection for the future.
 
+\clearpage
 
 \section{Variant detection in cell-free DNA sequencing data}
 
 NGS of cfDNA is a non-invasive method for tumor-associated or drug resistant variants detection, which will be highly promising for detecting clinical biomarkers. 
 Many remarkable variants on tumor-specific genes, such as \textit{TP53}, \textit{BRAF}, and \textit{KRAS}, can be observed on cfDNA.
 \textit{BRAF} variant V600E was first detected on cfDNA by~\citep{shinozaki2007utility} at different stages and demonstrated its clinical use for monitoring behavior of melanoma patients.
-These clinically relevant variants can be taken as candidate biomarkers and identification of these variants are required to monitor the response to treatment.
-
-\clearpage
+A "liquid biopsy" method is used to identify variants at allele frequency of $2\%$ with high sensitivity and specificity in the circulating cfDNA of tumours~\citep{forshew2012noninvasive}.
+NGS technology also enabled fetal DNA sequencing in maternal plasma.
+A NGS-based cfDNA sequencing with $65\times$ coverage revealed genome-wide variants of the fetus and demonstrated different patterns of fetal and maternal genomes~\citep{lo2010maternal}.
 
 We summarize the workflow of variant detection in cfDNA NGS data in Figure \ref{fig:flowchart}.
 CfDNA is first extracted from plasma where tumor cfDNA (blue curves) and normal cfDNA (green curves) are mixed together.
 After library construction and sequencing process, reads are aligned to the reference genome to prepare for alteration detection.
 Then, a rare variant detection method is needed to identify the single nucleotide variants in the cfDNA sequencing data.
 Finally, tumor-associated variants are obtained and can be further interpreted for clinical utility.
+These clinically relevant variants can be taken as candidate biomarkers and identification of these variants are required to monitor the response to treatment.
 
 
 \begin{figure*}[ht]
@@ -120,7 +116,7 @@ Finally, tumor-associated variants are obtained and can be further interpreted f
 
 The cost of whole-genome sequence (WGS) or whole-exome sequence (WES) has been reduced to below $\$1,000$ ~\citep{caulfield2013reflections}, which has made it possible to have a deeper understanding of the structure of genomes to improve the effectiveness of disease treatment. 
 Currently, the bottleneck of large-scale sequencing is accurate and efficient data analysis rather than data generation.
-Most variants revealed by the WGS and WES are demonstrated to be rare by The 1000 Genomes Project Consortium~\citep{10002010map} and rare variants do cause risk of disease or have large effects~\citep{kosmicki2016discovery, ng2010exome}.
+Most variants revealed by the WGS and WES are demonstrated to be rare by The 1000 Genomes Project Consortium~\citep{10002010map} and rare variants do cause risk of disease or have large effects~\citep{koboldt2013next, kosmicki2016discovery, ng2010exome}.
 The oseltamivir resistance variant, H275Y, exists in a fraction of $0.18\%$ in a H1N1 clinical sample~\citep{Flaherty2012}.
 However, deep sequencing of WGS or WES on multiple samples is so expensive that detection of a $0.1\%$ variant event is unfeasible.
 Thus, accurate and sensitive variant detection methods are needed to identify this causal variant to improve the efficacy of antiviral therapy.
@@ -175,7 +171,7 @@ Balance of accurate variant detection and efficient running time of a statistica
 In variant detection, errors may be caused due to the limitation of the design of variant detection methods.
 Robustness evaluation is important to study the ability of a variant detection method to handle noise and contamination in the sequencing data. 
 For example, robust Bayesian analysis is often conducted to study the uncertainty of prior distributions for model robustness assessment.
-A prior assignment in a probabilistic method can be subjective, which may cause bias to predict the probabilistic distribution of the allele frequency of a site in the sequence.
+A prior assignment in an empirical Bayesian method can be subjective, which may cause bias to predict the probabilistic distribution of the allele frequency of a site in the sequence.
 This will lead a miscalling of a variant when comparing the allele frequencies of one site in a control/case pair.
 A good variant detection method should be insensitive to the changes of priors or parameters of the model system to generate consistent results.
 
@@ -206,10 +202,14 @@ Furthermore, unmatched sequencing read depths of case and control samples will r
 
 Intrinsic errors from next-generation sequencing platform exist in sample processing and sequencing~\citep{Olson2015}.
 These errors may cause false positives and false negatives in the variant detection step.
-Especially, identification of variants of minor variant allele frequency (VAF) is challenging because it is difficult to differentiate a true rare variant (VAF $<1\%$) from a common sequencing error rate ($1\% <$ VAF $< 3\%$).
+Especially, identification of variants of minor variant allele frequency (VAF) is challenging because it is difficult to differentiate a true rare variant (VAF $<1\%$) from a common sequencing error.
+A common sequencing error rate is reported to be from $1\%$ to $3\%$ in the initial release~\citep{shendure2008next}.
+However, a study on a synthetic DNA sequencing data set reports that the sequencing error rate in NGS technology is less than that~\citep{Flaherty2012}, which makes it harder for detection.
+A web server, NGS-eval~\citep{may2015ngs} is developed to estimate sequencing errors and showed accurate estimation of error rate on mock microbial genetic marker seuqencing samples.
+It helps to estimate the sequencing quality of the NGS data and evluate the ability of variant detection methods.
 % give an example error from sample processing
 % give an example error from sequencing
-% give an example error from variant detection
+
 
 
 \subsection{Sample size}
@@ -268,22 +268,6 @@ It has been shown that EM-SNP outperforms SNVer~\citep{Wei2011} in rare variants
 The genotype likelihood is calculated using MAQ method~\citep{Li2008} by incorporating the dependency of the genotypes between tumour and normal samples.
 Sensitivity and precision are employed to evaluate the performance of variant detection on a simulated data set.
 
-\textbf{Strelka}~\citep{Saunders2012} is an algorithm for somatic variant detection in a joint analysis of matched tumour and normal samples.
-It is a Bayesian method that models the joint probabilistic distribution of continuous allele frequencies.
-Strelka is capable to maintain high sensitivity in low purity tumour samples.
-
-\textbf{FreeBayes}~\citep{Garrison2012} is a haplotype-based variant detection method for short read DNA sequencing data.
-It is a generalization of a Bayesian statistical method~\citep{marth1999general} to detect variants in both individual and pooled samples.
-A gradient ascent method is employed to establish a maximum a posteriori estimate of the genotype for each sample.
-This framework is able to identify longer and multi-alleles by modeling multiallelic site.
-
-\textbf{EBCall}~\citep{Shiraishi2013} is proposed to detect somatic variants by incorporating sequencing errors as prior information into the model.
-It is developed based on an empirical Bayesian framework where beta-binomial distribution is used to depict sequencing errors.
-EBCall can detect somatic variants of less than 10\% allele frequencies in tumour subclones.
-
-\textbf{DeepSNV}~\citep{gerstung2012reliable} is a powerful statistical method for detecting SNVs in ultra-deep sequencing data.
-This algorithm is built on a hierarchical beta-binomial model and a likelihood ratio test is calculated for each base for comparison with a control or a reference.
-DeepSNV is validated on subclonal diverse tumour samples of renal cell carcinoma and reveals an agreement of the variant allele frequencies of the variants with the original work~\citep{gerstung2012reliable}.
 
 
 
@@ -350,7 +334,22 @@ Platforms of languages and source code are provided.
 
 
 
+\textbf{Strelka}~\citep{Saunders2012} is an algorithm for somatic variant detection in a joint analysis of matched tumour and normal samples.
+It is a Bayesian method that models the joint probabilistic distribution of continuous allele frequencies.
+Strelka is capable to maintain high sensitivity in low purity tumour samples.
 
+\textbf{FreeBayes}~\citep{Garrison2012} is a haplotype-based variant detection method for short read DNA sequencing data.
+It is a generalization of a Bayesian statistical method~\citep{marth1999general} to detect variants in both individual and pooled samples.
+A gradient ascent method is employed to establish a maximum a posteriori estimate of the genotype for each sample.
+This framework is able to identify longer and multi-alleles by modeling multiallelic site.
+
+\textbf{EBCall}~\citep{Shiraishi2013} is proposed to detect somatic variants by incorporating sequencing errors as prior information into the model.
+It is developed based on an empirical Bayesian framework where beta-binomial distribution is used to depict sequencing errors.
+EBCall can detect somatic variants of less than 10\% allele frequencies in tumour subclones.
+
+\textbf{DeepSNV}~\citep{gerstung2012reliable} is a powerful statistical method for detecting SNVs in ultra-deep sequencing data.
+This algorithm is built on a hierarchical beta-binomial model and a likelihood ratio test is calculated for each base for comparison with a control or a reference.
+DeepSNV is validated on subclonal diverse tumour samples of renal cell carcinoma and reveals an agreement of the variant allele frequencies of the variants with the original work~\citep{gerstung2012reliable}.
 
 \textbf{EBM}~\citep{Zhou2012} aims to detect SNVs in pooled sequencing data by accurately estimating the sequencing error distribution across multiple pools and genomic positions. 
 It is a empirical Bayes mixture model and an expectation-conditional maximization (ECM) algorithm is used for model inference and parameter estimation.
@@ -359,7 +358,6 @@ It is demonstrated with lower sum of squared errors of the estimated allele freq
 \textbf{Snape}~\citep{Raineri2012} is built to detect SNVs in pooled samples.
 It is a Bayesian method that takes into account of different priors to estimate the posterior frequency probability of SNVs.
 Snape has low false discovery rate and high power on a simulated data set that is generated by ART~\citep{huang2012art}.
-
 
 \textbf{SNVMix}~\citep{Goya2010} is a probabilistic method to detect SNVs from tumour NGS data.
 It is developed based on Binomial mixture models and an expectation maximization algorithm is used to obtain model parameters to predict allele frequencies.
@@ -434,6 +432,29 @@ Cake outperforms to any single algorithm with higher accuracy on two data sets, 
 It works well on WGS and WGE sequencing data by running on a standalone application.
 
 
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{bayesian.png}
+\caption{Framework of Bayesian method design for variant detection in NGS sequencing data.}
+\label{fig:Bayesian}
+\end{figure*}
+
+
+\subsection{Basic framework of Bayesian method for variant detection}
+
+Most of the current variant detection methods are developed based on Bayesian theory. 
+Here, we describe a basic workflow for developing Bayesian-based method for variant detection in Figure \ref{fig:Bayesian}.
+First, most of the methods require control (normal sample) and case (tumour sample) sequencing data in order to identify variants in the case.
+Then, the control and case samples will be fed into a Bayesian probabilistic model. 
+Besides the given data, prior probabilistic distribution need to be defined for empirical Bayesian models.
+Once we have a model, the following work is model inference based on the prior and likelihood of the data using Bayes rule.
+As an outcome, posterior distributions for control and case are obtained.
+Posterior distribution is proportional to both the data and the prior distribution. 
+Finally, a comparision between the posterior distirbutions of control and case is conducted to reveal the point mutations with a significant difference between them.
+
+
+
+
 \subsection{Advantages and disadvantages of different methods}
 
 Researchers are trying to compare the performances of the current variant detection methods in different applications based on their interests.
@@ -441,11 +462,13 @@ We summarize seven comparative analysis on variant detection methods in tumor-no
 The summary of method comparisons is helpful for people to select a appropriate method for their specific purpose.
 These comparisons mostly focus on the performances of VarScan, MuTect, GATK, SAMtools, JointSNVMix, SomaticSniper, and Strelka.
 Synthetic or real WGS/WES data are used as benchmarking data sets for method validation.
-Generally, results of the comparative analysis show that VarScan2 can detect more variants than other methods, but may yield more false positives~\citep{wang2013detecting, Spencer2014} .
+Generally, results of the comparative analysis show that VarScan2 can detect more variants than other methods, but may yield more false positives~\citep{wang2013detecting, Spencer2014}.
 SAMtools and GATK are not able to call rare variants in heterogeneous samples.
 Strelka is able to call variants in heterogeneous samples, but it has lower accuracy than muTect~\citep{wang2013detecting}.
 Overall, muTect outperformed other tested methods in detecting rare variants with low allele frequency and showed high sensitivity at different dilutions~\citep{wang2013detecting, Xu2014}.
 Since the performance depends on the attributes of specific data set and the ability of a method in calling variants in heterogeneous samples, a combination of several state-of-the-art methods may be used together to generate an intersection of sets of the candidate variants for consistency~\citep{liu2013variant}.
+
+
 
 
 \begin{landscape}
@@ -513,7 +536,35 @@ Ti/Tv, transition/transversion ratio.
 
 
 
+
 \section{Conclusions}
+\subsection{Challenges and opportunities for statistical methods on rare variant detection}
+
+A critical challenge for current statistical methods is to reduce the false positive calls on rare variant detection.
+It could be very easy for a statistical method to call a false positive when the allele frequency of the true positive rare variant is very close to the sequencing error.
+Increasing the depth of coverage may reduce the false positive rate, but it is not guaranteed to solve this problem.
+A possible solution is to find a way to estimate the pattern of sequencing errors that may be helpful to distinguish false positives from true rare variants.
+
+Another challenge is to improve the efficiency of statistical methods on the genome-wide sequence analysis.
+The size of whole-genome sequencing or whole-exome sequencing is large-scale and the applications of them are being successfully integrated to the clinical diagnostics and development of precision medicine~\citep{chiang2012exome, worthey2011making}.
+Hence, inefficient variant detection method will definitely inhibit the effectiveness of translating the sequencing data into knowledge.
+
+
+\subsection{The potential of deep learning in variant detection}
+
+Recently, deep learning is active in solving computational biology problems and multiple layers of the networks will dissect the structure of high-throughput sequencing data~\citep{angermueller2016deep}.
+Most of current statistical methods are developed based on the prior knowledge to analyze the sequencing data.
+For example, a prior probability was pre-defined for the allelic diversity for Snape~\citep{Raineri2012}.
+In variant detection using SOAPsnp, the prior for homozygous variant rate is set as 0.0005 and for heterozygous rate is set as 0.001~\citep{Li2009}.
+The prior probabilities were also set for both haploid and diploid genotypes according to the transition and transversion values of the study on dbSNPs alleles~\citep{zhao2002neighboring}. 
+But, deep learning networks can learn directly from the data without assigning a prior.
+The \textit{DeepBind} method is used to uncover the role of DNA/RNA binding proteins and also able to discover disease-related variants in sequencing data~\citep{alipanahi2015predicting}.
+The advantage of deep learning methods is that it enabled direct training of the model on the sequencing samples.
+Therefore, deep learning is very promising for variant detection to leverage a new direction for more accurate predictions.
+ 
+
+
+\subsection{Perspectives}
 
 
 \section{Acknowledgments}
@@ -528,36 +579,6 @@ Funding
 \bibliography{bib}
 \bibliographystyle{plain}
 
-%\begin{thebibliography}{4}
-%
-%% Format for article
-%\bibitem{1}
-%Author,A.B. and Author,C. (1992)
-%Article title.
-%\textit{Abbreviated Journal Name}, \textbf{5}, 300--330.
-%
-%% Format for book
-%\bibitem{2}
-%Author,D., Author,E.F. and Author,G. (1995)
-%\textit{Book Title}.
-%Publisher Name, Publisher Address.
-%
-%% Format for chapter in book
-%\bibitem{3}
-%Author,H. and Author,I. (2005)
-%Chapter title.
-%In
-%Editor,A. and Editor,B. (eds),
-%\textit{Book Title},
-%Publisher Name, Publisher Address,
-%pp.\ 60--80.
-%
-%% Another article
-%\bibitem{4}
-%Author,Y. and Author,Z. (2002)
-%Article title.
-%\textit{Abbreviated Journal Name}, \textbf{53}, 500--520.
-%
-%\end{thebibliography}
+
 
 \end{document}
