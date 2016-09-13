@@ -42,16 +42,18 @@ Accepted March 1, 2009}
 \maketitle
 
 \begin{abstract}
-Next-generation sequencing platform generated hundreds of millions of short reads to reveal genomic heterogeneity in disease samples like cancer.
-Cell-free DNA sequencing data is being used for early detection of variants in clinical samples for cancer treatment monitering.
+Next-generation sequencing platform enables generation of thousands of millions of short reads parallely to reveal genomic heterogeneity in disease samples like cancer.
+Cell-free DNA sequencing data is being used for early detection of variants in clinical samples for cancer treatment monitoring.
 In the last decade, researchers are becoming more and more interested in rare variants with minor allele frequency because they are prevalent in many primary cancer types.
 Many statistical or computational methods have been developed to detect single nucleotide variants in mixed samples, but precise detection of rare single nucleotide variants is still a major challenge for clinical use.
 Even though several methods are proposed to detect very rare variants in the heterogeneous samples, each method has its bias or is only designed for a particular application of interest.
-In this review, we highlight the need for sensitive variant detection methods for cell-free DNA data and discuss the hallmarks of a good statistical method from the perspective of accuracy, scalability, and robustness.
-We list the issues, quality control, depth of coverage, sequencing errors, and sample size, and discuss how these factors impact on the power of variant detection methods.
+%In this review, we highlight the need for sensitive variant detection methods for cell-free DNA data and discuss the hallmarks of a good statistical method from the perspective of accuracy, scalability, and robustness.
+In this review, we highlight the need for sensitive variant detection methods for cell-free DNA data.
+%We list the issues, quality control, depth of coverage, sequencing errors, and sample size, and discuss how these factors impact on the power of variant detection methods.
+We discuss the hallmarks of a good statistical method and the issues that impact on the power of variant detection methods.
 We classify 30 state-of-the-art methods into two categories, probabilistic and non-probabilistic, and survey every method on the aspects of specific purpose, statistical method, and metrics or applications.
-Furthermore, we summarize a basic framework about how a Bayesian-based method is developed for variant detection.
-
+Furthermore, a basic Bayesian framework for developing variant detection method is summarized.
+Finally, future challenges and opportunities are addressed.
 
 \end{abstract}
 
@@ -61,7 +63,7 @@ Furthermore, we summarize a basic framework about how a Bayesian-based method is
 %Scope of the article: nucleotides and variant calling in the context of larger pipeline.
 Next-generation sequencing (NGS) technology has revealed the presence of extensive genomic variants in clinical samples~\citep{koboldt2013next}.
 In general, genomic variants can be present in the form of single nucleotide variants (SNVs), insertions and deletions, structural variants, and copy number variations~\citep{Bao2014}.
-Single nucleotide variant is a primary source of genetic variation that can cause susceptibility to disease or drug resistance to anti-tumour therapeutics~citep{kessler2014resistance}.
+Single nucleotide variant is a primary source of genetic variation that can cause susceptibility to disease or drug resistance to anti-tumour therapeutics~\citep{kessler2014resistance}.
 The general pipeline to analyze single nucleotide variants in the large-scale NGS data basically consists five main steps: quality control, preprocessing, alignment, post-alignment processing, and variant analysis~\citep{pabinger2014survey, Bao2014}.
 Variant analysis basically contains three main parts: variant detection, annotation, and visualization, among which variant detection is crucial for NGS data analysis with an objective of discovering disease-causing variants.
 
@@ -116,7 +118,7 @@ These clinically relevant variants can be taken as candidate biomarkers and iden
 
 The cost of whole-genome sequence (WGS) or whole-exome sequence (WES) has been reduced to below $\$1,000$ ~\citep{caulfield2013reflections}, which has made it possible to have a deeper understanding of the structure of genomes to improve the effectiveness of disease treatment. 
 Currently, the bottleneck of large-scale sequencing is accurate and efficient data analysis rather than data generation.
-Most variants revealed by the WGS and WES are demonstrated to be rare by The 1000 Genomes Project Consortium~\citep{10002010map} and rare variants do cause risk of disease or have large effects~\citep{koboldt2013next, kosmicki2016discovery, ng2010exome}.
+Most variants revealed by the WGS and WES are demonstrated to be rare by The 1000 Genomes Project Consortium~\citep{10002010map} and rare variants do cause risk of disease or have large effects~\citep{koboldt2013next, kosmicki2016discovery, ng2010exome, keller2013mutations}.
 The oseltamivir resistance variant, H275Y, exists in a fraction of $0.18\%$ in a H1N1 clinical sample~\citep{Flaherty2012}.
 However, deep sequencing of WGS or WES on multiple samples is so expensive that detection of a $0.1\%$ variant event is unfeasible.
 Thus, accurate and sensitive variant detection methods are needed to identify this causal variant to improve the efficacy of antiviral therapy.
@@ -148,7 +150,7 @@ Receiver operating characteristic (ROC) curves are very useful to visualize and 
 Since each metric has its uncertainty and is related to sequence context of the data sets, selection of desired metrics relies on specific purposes and a discussion about selecting metrics for accuracy evaluation is stated in details in~\citep{Olson2015}.
 
 Ideally, an accurate variant detection method should have high sensitivity and specificity with low false discovery rate in identifying variants in a practical level of mutant allele frequencies.
-Since it is impossible for statistical methods to acquire ideal accuracy in all circumstances, good variant detection methods should be capable to detect true variants without causing many positives in an acceptable sensitivity and specificity for a particular data of interest.
+Since it is impossible for statistical methods to acquire ideal accuracy in all circumstances, good variant detection methods should be capable to detect true variants to keep the false positive rate as low as possible in an acceptable sensitivity and specificity for a particular data of interest.
 
 
 \subsection{Scalability}
@@ -201,6 +203,7 @@ Furthermore, unmatched sequencing read depths of case and control samples will r
 \subsection{Sequencing errors}
 
 Intrinsic errors from next-generation sequencing platform exist in sample processing and sequencing~\citep{Olson2015}.
+The sequencing errors are not in an uniform distribution due to the influence of the process of sequencing-by-synthesis~\citep{nakamura2011sequence, mamanova2010target}.
 These errors may cause false positives and false negatives in the variant detection step.
 Especially, identification of variants of minor variant allele frequency (VAF) is challenging because it is difficult to differentiate a true rare variant (VAF $<1\%$) from a common sequencing error.
 A common sequencing error rate is reported to be from $1\%$ to $3\%$ in the initial release~\citep{shendure2008next}.
@@ -287,10 +290,9 @@ Sensitivity and precision are employed to evaluate the performance of variant de
           & FamSeq & SNVs  & C++   & http://bioinformatics.mdanderson.org/main/FamSeq &~\citep{Peng2013}\\
           & MAQ & SNVs & Perl & http://maq.sourceforge.net/ &~\citep{Li2008}\\
           & JointSNVMix & SNVs  & Python & http://compbio.bccrc.ca/software/jointsnvmix/ &~\citep{Roth2012} \\
-          & \textbf{Bayesian Estimation} &       &       &       &  \\
+          & \textbf{Bayesian} &       &       &       &  \\
           & Virmid & SNVs  & Java  & https://sourceforge.net/projects/virmid/ &~\citep{Kim2013} \\
           & EM-SNP & SNVs  & R     & http://www-rcf.usc.edu/~fsun/Programs/EM-SNP/EM-SNP.html &~\citep{Chen2013}\\
-          & \textbf{Bayesian } &       &       &       &  \\
           & SomaticSniper & SNVs  & Perl  & http://gmt.genome.wustl.edu/packages/somatic-sniper/ &~\citep{Larson2012}\\
           & Strelka & SNVs, indels & Perl  & https://sites.google.com/site/strelkasomaticvariantcaller/ &~\citep{Saunders2012}\\
           & RVD/RVD2/VI RVD & SNVs  & Python & http://genomics.wpi.edu/rvd2/ &~\citep{He2015}\\
@@ -301,7 +303,7 @@ Sensitivity and precision are employed to evaluate the performance of variant de
           & Snape & SNVs  & C     & https://code.google.com/archive/p/snape-pooled/ &~\citep{Raineri2012}\\
           & SNVMix & SNVs  & C     & http://compbio.bccrc.ca/software/snvmix/ &~\citep{Goya2010} \\
           & SOAPsnp & SNVs  & C, C++ & http://soap.genomics.org.cn/soapsnp.html &~\citep{Li2009}\\
-          & Seurat & SNVs  & Java  & https://sites.google.com/site/seuratsomatic/ &~\citep{Christoforides2013}\\
+          & Seurat & SNVs, indels  & Java  & https://sites.google.com/site/seuratsomatic/ &~\citep{Christoforides2013}\\
           & \textbf{Likelihood-based} &       &       &       &  \\      
           & glfTools & SNVs  & C, C++  & csg.sph.umich.edu//abecasis/glfTools/ &~\citep{abecasis2010}\\    
           & PolyMutt & SNVs, indels  & C++  & http://genome.sph.umich.edu/wiki/Polymutt &~\citep{li2012likelihood}\\           
@@ -460,15 +462,14 @@ Finally, a comparision between the posterior distirbutions of control and case i
 Researchers are trying to compare the performances of the current variant detection methods in different applications based on their interests.
 We summarize seven comparative analysis on variant detection methods in tumor-normal paired NGS data in Table \ref{tbl:comparison}.
 The summary of method comparisons is helpful for people to select a appropriate method for their specific purpose.
-These comparisons mostly focus on the performances of VarScan, MuTect, GATK, SAMtools, JointSNVMix, SomaticSniper, and Strelka.
+These comparisons mostly focus on the performances of VarScan, MuTect, GATK, SAMtools, JointSNVMix, SomaticSniper, EBCall, and Strelka.
 Synthetic or real WGS/WES data are used as benchmarking data sets for method validation.
-Generally, results of the comparative analysis show that VarScan2 can detect more variants than other methods, but may yield more false positives~\citep{wang2013detecting, Spencer2014}.
-SAMtools and GATK are not able to call rare variants in heterogeneous samples.
-Strelka is able to call variants in heterogeneous samples, but it has lower accuracy than muTect~\citep{wang2013detecting}.
-Overall, muTect outperformed other tested methods in detecting rare variants with low allele frequency and showed high sensitivity at different dilutions~\citep{wang2013detecting, Xu2014}.
-Since the performance depends on the attributes of specific data set and the ability of a method in calling variants in heterogeneous samples, a combination of several state-of-the-art methods may be used together to generate an intersection of sets of the candidate variants for consistency~\citep{liu2013variant}.
-
-
+Generally, results of the comparative analysis show that SAMtools and GATK are not able to call rare variants in heterogeneous samples.
+VarScan2 can detect more variants than other methods, but may yield more false positives~\citep{wang2013detecting, Spencer2014}.
+Strelka returns a low number of variants in conservative way~\citep{kroigaard2016evaluation}.
+Although Strelka is able to call variants in heterogeneous samples, it has lower accuracy than MuTect~\citep{wang2013detecting}.
+EBCall and MuTect are rubust to the changing of read depth and perform very well in a study of somatic variant detection in real exome and targeted deep sequencing data~\citep{kroigaard2016evaluation}.
+Overall, MuTect outperformed other tested methods in detecting rare variants with low allele frequency and showed high sensitivity at different dilutions~\citep{wang2013detecting, Xu2014}.
 
 
 \begin{landscape}
@@ -511,7 +512,15 @@ Since the performance depends on the attributes of specific data set and the abi
     \midrule
     \multicolumn{1}{l}{Synthetically pooled Illumina sequencing} & GATK, CRISP, LoFreq & \multicolumn{1}{l}{Showed 80\% accuracy with different read depths.} &~\citep{Huang2015} \\
           & VarScan, SNVer  & \multicolumn{1}{l}{Showed lower FPR but lower sensitivity.} &  \\
-
+          
+    \midrule
+    \multicolumn{1}{l}{Breast cancer exome sequencing} & EBCall, MuTect, Virmid, Strelka & \multicolumn{1}{l}{Reported them to be the most reliable callers;} &~\citep{kroigaard2016evaluation} \\
+    \multicolumn{1}{l}{Targeted deep sequencing} & & \multicolumn{1}{l}{Returned the lowest number of variants.} & \\
+		&	& \multicolumn{1}{l}{EBCall and Mutect are robust to varying of read depth.} & \\
+  		&  Shimmer, Somatic Sniper, VarScan2, Seurat & \multicolumn{1}{l}{Showed highly sensitive to increased depths;} &  \\
+    		&	& \multicolumn{1}{l}{Returned high numbers of variants in low agreement with others.} & \\    
+    		&	& \multicolumn{1}{l}{Seurat showed the highest sensitivity of $96\%$.} & \\            
+        
     \bottomrule
     \end{tabular}
    \begin{tablenotes}
@@ -534,20 +543,8 @@ Ti/Tv, transition/transversion ratio.
 \end{landscape}
 
 
-
-
-
-\section{Conclusions}
-\subsection{Challenges and opportunities for statistical methods on rare variant detection}
-
-A critical challenge for current statistical methods is to reduce the false positive calls on rare variant detection.
-It could be very easy for a statistical method to call a false positive when the allele frequency of the true positive rare variant is very close to the sequencing error.
-Increasing the depth of coverage may reduce the false positive rate, but it is not guaranteed to solve this problem.
-A possible solution is to find a way to estimate the pattern of sequencing errors that may be helpful to distinguish false positives from true rare variants.
-
-Another challenge is to improve the efficiency of statistical methods on the genome-wide sequence analysis.
-The size of whole-genome sequencing or whole-exome sequencing is large-scale and the applications of them are being successfully integrated to the clinical diagnostics and development of precision medicine~\citep{chiang2012exome, worthey2011making}.
-Hence, inefficient variant detection method will definitely inhibit the effectiveness of translating the sequencing data into knowledge.
+Since the performance depends on the quality of specific data set and the ability of a method in calling variants in heterogeneous samples, a combination of several state-of-the-art methods may be used together to generate an intersection of sets of the candidate variants for consistency~\citep{liu2013variant}.
+A unified framework is provided for combining the detected variants from multiple variant detection methods with improved performance over each single method~\citep{kim2014combining}.
 
 
 \subsection{The potential of deep learning in variant detection}
@@ -561,10 +558,32 @@ But, deep learning networks can learn directly from the data without assigning a
 The \textit{DeepBind} method is used to uncover the role of DNA/RNA binding proteins and also able to discover disease-related variants in sequencing data~\citep{alipanahi2015predicting}.
 The advantage of deep learning methods is that it enabled direct training of the model on the sequencing samples.
 Therefore, deep learning is very promising for variant detection to leverage a new direction for more accurate predictions.
- 
+
+
+\section{Conclusions}
+
+This review addressed the necessity and issues of sensitive statistical methods for rare SNVs detection in DNA NGS data and classified 30 state-of-the-art methods to different statistical categories.
+Bayesian method, as a prevailing framework for current variant detection, is summarized for guidance of researchers in probabilistic statistical methods development for variant detection.
+It is expected that this review will help biologists and bioinformaticians in related fields to understand more about the current methods for rare variant detection and accelerate interpretation of the next-generation sequencing data for clinical studies. 
+
+
+\subsection{Challenges and opportunities for statistical methods on rare variant detection}
+
+A critical challenge for current statistical methods is to reduce the false positive calls on rare variant detection.
+It could be very easy for a statistical method to call a false positive when the allele frequency of the true positive rare variant is very close to the sequencing error.
+Increasing the depth of coverage may reduce the false positive rate, but it is not guaranteed to solve this problem.
+A possible solution is to estimate the pattern of sequencing errors as EBCall~\citep{Shiraishi2013} did to distinguish false positives from true rare variants.
+Post-call filtering with parameters cut-offs may be useful following the step of variant detection as VarScan2~\citep{Koboldt2012} did.
+
+Another challenge is to improve the efficiency of statistical methods on the genome-wide sequence analysis.
+The size of whole-genome sequencing or whole-exome sequencing is large-scale and the applications of them are being successfully integrated to the clinical diagnostics and development of precision medicine~\citep{chiang2012exome, worthey2011making}.
+Hence, inefficient variant detection method will definitely inhibit the effectiveness of translating the sequencing data into knowledge.
+
 
 
 \subsection{Perspectives}
+
+
 
 
 \section{Acknowledgments}
