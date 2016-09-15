@@ -562,22 +562,23 @@ Therefore, deep learning is very promising for variant detection to leverage a n
 
 \section{Conclusions}
 
-This review addressed the necessity and issues of sensitive statistical methods for rare SNVs detection in DNA NGS data and classified 30 state-of-the-art methods to different statistical categories.
-Bayesian method, as a prevailing framework for current variant detection, is summarized for guidance of researchers in probabilistic statistical methods development for variant detection.
-It is expected that this review will help biologists and bioinformaticians in related fields to understand more about the current methods for rare variant detection and accelerate interpretation of the next-generation sequencing data for clinical studies. 
+This review addressed the necessity of sensitive variant detection methods for rare SNVs detection in DNA NGS data.
+We classified 30 state-of-the-art methods to different categories based on the methodology.
+A Bayesian framework, as a prevailing method for current variant detection, is summarized for guidance of researchers to develop probabilistic statistical methods for variant detection.
+It is expected that this review will help biologists and bioinformaticians in related fields to understand more about the current methods for rare variant detection and furthermore accelerate interpretation of the next-generation sequencing data for clinical studies. 
 
 
 \subsection{Challenges and opportunities for statistical methods on rare variant detection}
 
-A critical challenge for current statistical methods is to reduce the false positive calls on rare variant detection.
-It could be very easy for a statistical method to call a false positive when the allele frequency of the true positive rare variant is very close to the sequencing error.
-Increasing the depth of coverage may reduce the false positive rate, but it is not guaranteed to solve this problem.
+A critical challenge for current statistical methods in rare variant detection is to reduce false positive calls.
+It could be very easy for a statistical method to call a false positive when the allele frequency of a true positive variant is very close to the fraction of sequencing errors.
+Increasing the depth of coverage may reduce false positive rate, but it is not guaranteed in all circumstances.
 A possible solution is to estimate the pattern of sequencing errors as EBCall~\citep{Shiraishi2013} did to distinguish false positives from true rare variants.
-Post-call filtering with parameters cut-offs may be useful following the step of variant detection as VarScan2~\citep{Koboldt2012} did.
+Post-call filtering that consider parameters cut-offs may be also useful as VarScan2~\citep{Koboldt2012} did.
 
-Another challenge is to improve the efficiency of statistical methods on the genome-wide sequence analysis.
-The size of whole-genome sequencing or whole-exome sequencing is large-scale and the applications of them are being successfully integrated to the clinical diagnostics and development of precision medicine~\citep{chiang2012exome, worthey2011making}.
-Hence, inefficient variant detection method will definitely inhibit the effectiveness of translating the sequencing data into knowledge.
+Another challenge is to improve the efficiency of statistical methods on whole genome-wide sequence analysis.
+The size of whole-genome sequencing or whole-exome sequencing is large-scale and applications of them are being successfully integrated to the clinical diagnostics and development of precision medicine~\citep{chiang2012exome, worthey2011making}.
+Inefficient variant detection in genome-wide sequencing data will definitely inhibit the effectiveness of translating the sequencing data into knowledge.
 
 
 
